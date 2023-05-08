@@ -25,6 +25,21 @@ version = properties("pluginVersion").get()
 // Configure project's dependencies
 repositories {
     mavenCentral()
+    maven("https://maven.pkg.github.com/Qawaz/KATE") {
+        name = "GithubPackages"
+        try {
+            credentials {
+                username = (System.getenv("GPR_USER")).toString()
+                password = (System.getenv("GPR_API_KEY")).toString()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+}
+
+dependencies {
+    implementation("com.wakaztahir:kate:1.0.24")
 }
 
 // Set the JVM language level used to build the project. Use Java 11 for 2020.3+, and Java 17 for 2022.2+.

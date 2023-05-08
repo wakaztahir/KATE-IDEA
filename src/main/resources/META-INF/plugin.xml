@@ -9,10 +9,18 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.wakaztahir.kateidea.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+        <fileType
+                name="KATE"
+                implementationClass="com.github.wakaztahir.kateidea.KATEFileType"
+                fieldName="INSTANCE"
+                language="KATE"
+                extensions="kate"/>
     </extensions>
 
-    <applicationListeners>
-        <listener class="com.github.wakaztahir.kateidea.listeners.MyFrameStateListener" topic="com.intellij.ide.FrameStateListener"/>
-    </applicationListeners>
+    <extensions defaultExtensionNs="com.intellij">
+        <lang.parserDefinition
+                language="KATE"
+                implementationClass="com.github.wakaztahir.kateidea.parser.KATEParserDefinition"/>
+    </extensions>
+
 </idea-plugin>
