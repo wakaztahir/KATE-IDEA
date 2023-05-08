@@ -23,4 +23,10 @@
                 implementationClass="com.github.wakaztahir.kateidea.parser.KATEParserDefinition"/>
     </extensions>
 
+    <extensions defaultExtensionNs="com.intellij">
+        <lang.syntaxHighlighterFactory
+                language="KATE"
+                implementationClass="com.github.wakaztahir.kateidea.parser.highlighting.KATESyntaxHighlighterFactory"/>
+    </extensions>
+
 </idea-plugin>

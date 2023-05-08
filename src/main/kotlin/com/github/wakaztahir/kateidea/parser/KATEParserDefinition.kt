@@ -28,7 +28,7 @@ class KATEParserDefinition : ParserDefinition {
     override fun getStringLiteralElements(): TokenSet = TokenSet.EMPTY
 
     override fun createElement(node: ASTNode): PsiElement = if (node.elementType is KATEElementType) {
-        node.psi
+        (node.elementType as KATEElementType).toPsiElement(node)
     } else {
         throw IllegalStateException("element type must always be KATEElementType for KATEParserDefinition")
     }

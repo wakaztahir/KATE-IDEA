@@ -1,6 +1,6 @@
 package com.github.wakaztahir.kateidea.parser
 
-import com.github.wakaztahir.kateidea.parser.tokenizer.ParsedCodeGen
+import com.github.wakaztahir.kateidea.parser.tokenizer.ParsedCodeGenImpl
 import com.wakaztahir.kate.model.CodeGen
 import com.wakaztahir.kate.model.LazyBlock
 import com.wakaztahir.kate.model.block.DefaultNoRawString
@@ -9,21 +9,21 @@ import com.wakaztahir.kate.parser.stream.TextDestinationStream
 
 class ParsedBlockParser(private val block: LazyBlock) : LazyBlock by block {
 
-    val codeGens = mutableListOf<ParsedCodeGen>()
+    val codeGens = mutableListOf<ParsedCodeGenImpl>()
 
-    fun parseCompletely(destination: TextDestinationStream = TextDestinationStream()): List<ParsedCodeGen> {
+    fun parseCompletely(destination: TextDestinationStream = TextDestinationStream()): List<ParsedCodeGenImpl> {
         generateTo(destination)
         return codeGens
     }
 
     override fun writeDirective(previous : Int,directive: CodeGen, destination: DestinationStream) {
-        codeGens.add(ParsedCodeGen(codeGen = directive, startPointer = previous, endPointer = source.pointer))
+        codeGens.add(ParsedCodeGenImpl(codeGen = directive, startPointer = previous, endPointer = source.pointer))
     }
 
     override fun writeCurrentChar(destination: DestinationStream) {
         if (codeGens.isEmpty() || codeGens.last().codeGen !is DefaultNoRawString) {
             codeGens.add(
-                ParsedCodeGen(
+                ParsedCodeGenImpl(
                     codeGen = DefaultNoRawString("${source.currentChar}"),
                     startPointer = source.pointer,
                     endPointer = source.pointer + 1
@@ -33,7 +33,7 @@ class ParsedBlockParser(private val block: LazyBlock) : LazyBlock by block {
             // todo kinda hacky
             val last = codeGens.removeLast()
             codeGens.add(
-                ParsedCodeGen(
+                ParsedCodeGenImpl(
                     codeGen = DefaultNoRawString((last.codeGen as DefaultNoRawString).stringValue + source.currentChar),
                     startPointer = last.startPointer,
                     endPointer = last.endPointer + 1

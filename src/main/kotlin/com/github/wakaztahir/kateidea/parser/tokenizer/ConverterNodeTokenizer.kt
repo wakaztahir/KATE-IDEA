@@ -2,6 +2,7 @@ package com.github.wakaztahir.kateidea.parser.tokenizer
 
 import com.wakaztahir.kate.model.*
 import com.wakaztahir.kate.model.block.DefaultNoRawString
+import com.wakaztahir.kate.model.model.KATEParsingError
 import com.wakaztahir.kate.model.model.KATEUnit
 import com.wakaztahir.kate.parser.ForLoop
 import com.wakaztahir.kate.parser.MultilineComment
@@ -13,6 +14,8 @@ import com.wakaztahir.kate.parser.variable.VariableDeclaration
 import com.wakaztahir.kate.tokenizer.NodeTokenizer
 
 interface ConverterNodeTokenizer<R> : NodeTokenizer<Converter<out CodeGen, R>> {
+
+    override val kateParsingError: Converter<KATEParsingError, R>
 
     override val multilineComment: Converter<MultilineComment, R>
 

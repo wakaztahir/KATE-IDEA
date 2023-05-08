@@ -1,15 +1,8 @@
 package com.github.wakaztahir.kateidea.parser
 
-import com.github.wakaztahir.kateidea.parser.tokenizer.KATEElementTypes
-import com.intellij.ide.highlighter.custom.AbstractCustomLexer
-import com.intellij.ide.highlighter.custom.tokens.TokenParser
-import com.intellij.lexer.Lexer
 import com.intellij.lexer.LexerBase
-import com.intellij.lexer.LexerPosition
 import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
-import com.jetbrains.rd.util.LogLevel
-import com.jetbrains.rd.util.Logger
 
 class KATELexer  : LexerBase() {
     private lateinit var buffer: CharSequence
