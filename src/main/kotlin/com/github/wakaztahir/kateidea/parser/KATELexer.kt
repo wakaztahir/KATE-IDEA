@@ -1,5 +1,6 @@
 package com.github.wakaztahir.kateidea.parser
 
+import com.github.wakaztahir.kateidea.parser.tokenizer.KATEElementTypes
 import com.intellij.ide.highlighter.custom.AbstractCustomLexer
 import com.intellij.ide.highlighter.custom.tokens.TokenParser
 import com.intellij.lexer.Lexer
@@ -29,7 +30,7 @@ class KATELexer  : LexerBase() {
 
     override fun getTokenType(): IElementType? {
         return if (currentPosition < endOffset) {
-            TokenType.BAD_CHARACTER // Treat everything as a bad character token
+            TokenType.BAD_CHARACTER // Treat everything as a code character
         } else {
             null // We reached the end of the buffer
         }

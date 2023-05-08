@@ -1,5 +1,7 @@
 package com.github.wakaztahir.kateidea.parser.tokenizer
 
-interface Converter<T> {
-    fun <R> convert(item: T): R
+import com.wakaztahir.kate.model.CodeGen
+
+interface Converter<T : CodeGen,R> {
+    fun convert(item: T): R
 }
