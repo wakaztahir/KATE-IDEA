@@ -8,32 +8,23 @@ import com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributes
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.psi.tree.IElementType
 
-class KATESyntaxHighlighter : SyntaxHighlighterBase() {
+class KATESyntaxHighlighter(val lexer : Lexer) : SyntaxHighlighterBase() {
 
     override fun getHighlightingLexer(): Lexer {
-        TODO("Not yet implemented")
+        return lexer
     }
 
     override fun getTokenHighlights(tokenType: IElementType): Array<out TextAttributesKey?> {
-
-        if (tokenType.equals(SimpleTypes.SEPARATOR)) {
-            return SEPARATOR_KEYS
-        }
-        if (tokenType.equals(SimpleTypes.KEY)) {
+        if(tokenType == KATETokens.IF || tokenType == KATETokens.VAR){
             return KEY_KEYS
         }
-        if (tokenType.equals(SimpleTypes.VALUE)) {
+        if(tokenType == KATETokens.TEXT){
             return VALUE_KEYS
         }
-        if (tokenType.equals(SimpleTypes.COMMENT)) {
-            return COMMENT_KEYS
-        }
-        return if (tokenType.equals(TokenType.BAD_CHARACTER)) {
-            BAD_CHAR_KEYS
-        } else EMPTY_KEYS
+        return EMPTY_KEYS
     }
 
-    companion object {
+//    companion object {
         val SEPARATOR: TextAttributesKey =
             createTextAttributesKey("SIMPLE_SEPARATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN)
         val KEY: TextAttributesKey = createTextAttributesKey("SIMPLE_KEY", DefaultLanguageHighlighterColors.KEYWORD)
@@ -48,5 +39,5 @@ class KATESyntaxHighlighter : SyntaxHighlighterBase() {
         private val VALUE_KEYS: Array<TextAttributesKey> = arrayOf<TextAttributesKey>(VALUE)
         private val COMMENT_KEYS: Array<TextAttributesKey> = arrayOf<TextAttributesKey>(COMMENT)
         private val EMPTY_KEYS: Array<TextAttributesKey?> = arrayOfNulls<TextAttributesKey>(0)
-    }
+//    }
 }

@@ -12,7 +12,7 @@ class ParsedBlockParser(private val block: LazyBlock) : LazyBlock by block {
     val codeGens = mutableListOf<ParsedCodeGenImpl>()
 
     fun parseCompletely(destination: TextDestinationStream = TextDestinationStream()): List<ParsedCodeGenImpl> {
-        generateTo(destination)
+        parse().generateTo(destination)
         return codeGens
     }
 

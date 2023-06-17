@@ -17,9 +17,9 @@ class KATEParserDefinition : ParserDefinition {
 
     private val kateFileElementType = IFileElementType(KATELanguage)
 
-    override fun createLexer(project: Project?): Lexer = KATELexer()
+    override fun createLexer(project: Project?): Lexer = NewLexer()
 
-    override fun createParser(project: Project?): PsiParser = KATEParser()
+    override fun createParser(project: Project?): PsiParser = NewParser()
 
     override fun getFileNodeType(): IFileElementType = kateFileElementType
 

@@ -9,21 +9,41 @@ object KATEElementTypesFactory : NodeTokenizer<KATEElementTypeProvider> {
     override val kateParsingError: KATEElementTypeProvider = object : KATEElementTypeProvider {
         override fun provide(codeGen: CodeGen): KATEElementType = KATEElementType("ParsingError")
     }
+
+    override val block: KATEElementTypeProvider
+        get() = TODO("Not yet implemented")
+
     override val conditionalFor: KATEElementTypeProvider = object : KATEElementTypeProvider {
         override fun provide(codeGen: CodeGen): KATEElementType = KATEElementType("ConditionalFor")
     }
+
     override val defaultNoRawBlock: KATEElementTypeProvider = object : KATEElementTypeProvider {
         override fun provide(codeGen: CodeGen): KATEElementType = KATEElementType("DefaultNoRawBlock")
     }
+
+    override val defaultNoRawExpression: KATEElementTypeProvider
+        get() = TODO("Not yet implemented")
+
     override val defaultNoRawString: KATEElementTypeProvider = object : KATEElementTypeProvider {
         override fun provide(codeGen: CodeGen): KATEElementType = KATEElementType("DefaultNoRawString")
     }
     override val embeddingDirective: KATEElementTypeProvider = object : KATEElementTypeProvider {
         override fun provide(codeGen: CodeGen): KATEElementType = KATEElementType("EmbeddingDirective")
     }
+
+    override val forLoopBreak: KATEElementTypeProvider
+        get() = TODO("Not yet implemented")
+
+    override val forLoopContinue: KATEElementTypeProvider
+        get() = TODO("Not yet implemented")
+
     override val functionDefinition: KATEElementTypeProvider = object : KATEElementTypeProvider {
         override fun provide(codeGen: CodeGen): KATEElementType = KATEElementType("FunctionDefinition")
     }
+
+    override val functionReturn: KATEElementTypeProvider
+        get() = TODO("Not yet implemented")
+
     override val ifStatement: KATEElementTypeProvider = object : KATEElementTypeProvider {
         override fun provide(codeGen: CodeGen): KATEElementType = KATEElementType("IfStatement")
     }
@@ -45,6 +65,9 @@ object KATEElementTypesFactory : NodeTokenizer<KATEElementTypeProvider> {
     override val partialRawBlock: KATEElementTypeProvider = object : KATEElementTypeProvider {
         override fun provide(codeGen: CodeGen): KATEElementType = KATEElementType("PartialRawBlock")
     }
+    override val partialRawFunctionCall: KATEElementTypeProvider
+        get() = TODO("Not yet implemented")
+
     override val placeholderDefinition: KATEElementTypeProvider = object : KATEElementTypeProvider {
         override fun provide(codeGen: CodeGen): KATEElementType = KATEElementType("PlaceholderDefinition")
     }
