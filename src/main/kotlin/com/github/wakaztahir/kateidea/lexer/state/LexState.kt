@@ -23,7 +23,7 @@ inline operator fun <T> LexState<T>.setValue(container: Any, property: KProperty
 
 interface LexStateList : LexStateSaver {
 
-    var members: MutableList<LexStateSaver>
+    val members: MutableList<LexStateSaver>
 
     override fun toState(): Int {
         var stateValue = 0
@@ -83,7 +83,7 @@ class FloatLexState(override var state: Float) : LexState<Float>, LexStateSaver 
 
 open class CompositeLexState : LexStateList {
 
-    override var members: MutableList<LexStateSaver> = mutableListOf()
+    override val members: MutableList<LexStateSaver> = mutableListOf()
 
     private fun <T : LexStateSaver> makeState(state: T): T {
         members.add(state)
