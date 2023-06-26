@@ -4,67 +4,69 @@ interface TokenConverter<T> {
 
     fun convert(token : KATEToken.DefaultNoRawString) : T
 
+    fun convert(token : KATEToken.CommentString) : T
+
     fun convert(token : KATEToken.ErrorToken) : T
 
-    fun convertIf(token : KATEToken.String) : T
+    fun convert(token : KATETokens.If) : T
 
-    fun convertFor(token : KATEToken.String) : T
+    fun convert(token : KATETokens.For) : T
 
-    fun convertVar(token : KATEToken.String) : T
+    fun convert(token : KATETokens.Var) : T
 
-    fun convertFunction(token : KATEToken.String) : T
+    fun convert(token : KATETokens.Function) : T
 
-    fun convertPlus(token : KATEToken.Char) : T
+    fun convert(token : KATETokens.Plus) : T
 
-    fun convertMinus(token : KATEToken.Char) : T
+    fun convert(token : KATETokens.Minus) : T
 
-    fun convertMultiply(token : KATEToken.Char) : T
+    fun convert(token : KATETokens.Multiply) : T
 
-    fun convertDivide(token : KATEToken.Char) : T
+    fun convert(token : KATETokens.Divide) : T
 
-    fun convertModulus(token : KATEToken.Char) : T
+    fun convert(token : KATETokens.Modulus) : T
 
-    fun convertLeftParenthesis(token : KATEToken.Char) : T
+    fun convert(token : KATETokens.LeftParenthesis) : T
 
-    fun convertRightParenthesis(token : KATEToken.Char) : T
+    fun convert(token : KATETokens.RightParenthesis) : T
 
-    fun convertLeftBracket(token : KATEToken.Char) : T
+    fun convert(token : KATETokens.LeftBracket) : T
 
-    fun convertRightBracket(token : KATEToken.Char) : T
+    fun convert(token : KATETokens.RightBracket) : T
 
-    fun convertLeftBrace(token : KATEToken.Char) : T
+    fun convert(token : KATETokens.LeftBrace) : T
 
-    fun convertRightBrace(token : KATEToken.Char) : T
+    fun convert(token : KATETokens.RightBrace) : T
 
-    fun convertAt(token : KATEToken.Char) : T
+    fun convert(token : KATETokens.At) : T
 
-    fun convertCommentStart(token : KATEToken.String) : T
+    fun convert(token : KATETokens.CommentStart) : T
 
-    fun convertCommentEnd(token : KATEToken.String) : T
+    fun convert(token : KATETokens.CommentEnd) : T
 
-    fun convertEmbed(token : KATEToken.String) : T
+    fun convert(token : KATETokens.Embed) : T
 
-    fun convertEmbedOnce(token : KATEToken.String) : T
+    fun convert(token : KATETokens.EmbedOnce) : T
 
-    fun convertPlaceholderUse(token : KATEToken.String) : T
+    fun convert(token : KATETokens.PlaceholderUse) : T
 
-    fun convertPlaceholder(token : KATEToken.String) : T
+    fun convert(token : KATETokens.Placeholder) : T
 
-    fun convertDefinePlaceholder(token : KATEToken.String) : T
+    fun convert(token : KATETokens.DefinePlaceholder) : T
 
-    fun convertEndDefinePlaceholder(token : KATEToken.String) : T
+    fun convert(token : KATETokens.EndDefinePlaceholder) : T
 
-    fun convertDefaultNoRaw(token : KATEToken.String) : T
+    fun convert(token : KATETokens.DefaultNoRaw) : T
 
-    fun convertEndDefaultNoRaw(token : KATEToken.String) : T
+    fun convert(token : KATETokens.EndDefaultNoRaw) : T
 
-    fun convertPartialRaw(token : KATEToken.String) : T
+    fun convert(token : KATETokens.PartialRaw) : T
 
-    fun convertEndPartialRaw(token : KATEToken.String) : T
+    fun convert(token : KATETokens.EndPartialRaw) : T
 
-    fun convertRaw(token : KATEToken.String) : T
+    fun convert(token : KATETokens.Raw) : T
 
-    fun convertEndRaw(token : KATEToken.String) : T
+    fun convert(token : KATETokens.EndRaw) : T
 
 
 }

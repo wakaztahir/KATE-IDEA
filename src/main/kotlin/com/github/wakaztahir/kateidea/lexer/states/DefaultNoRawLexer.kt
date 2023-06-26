@@ -1,57 +1,46 @@
 package com.github.wakaztahir.kateidea.lexer.states
 
 import com.github.wakaztahir.kateidea.lexer.KATEToken
-import com.github.wakaztahir.kateidea.lexer.KATETokens
-import com.github.wakaztahir.kateidea.lexer.TokenType
-import com.github.wakaztahir.kateidea.lexer.readSingleWordAhead
+import com.github.wakaztahir.kateidea.lexer.range
+import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
 import com.wakaztahir.kate.lexer.stream.SourceStream
-import com.wakaztahir.kate.lexer.stream.isAtCurrentPosition
 import com.wakaztahir.kate.lexer.stream.readTextAheadUntil
 
 class DefaultNoRawLexer(
     private val source: SourceStream,
     private val endAtDefaultNoRaw: Boolean
-) : Lexer {
+) : Lexer, CompositeLexState() {
 
-    override val hasLexed: Boolean get() = source.hasEnded
+    private val lexersList: List<Lexer> = state(
+        listOf(
+            CommentLexer(source),
+            KeywordLexer(source)
+        )
+    )
 
-    private var parseDirectiveWord = false
-
-    private fun String.asKeyword(): KATEToken.Static? {
-        return KATETokens.KeywordsMap[this]
-    }
-
-    override fun lexTokenAtCurrentPosition(): TokenRange? {
-        if (source.hasEnded) return null
-        if (source.currentChar == KATETokens.At.value) {
-            parseDirectiveWord = true
-            return KATETokens.At.range(source)
-        }
-        return if (parseDirectiveWord) {
-            val word = source.readSingleWordAhead()!!
-            parseDirectiveWord = false
-            val keyword = word.asKeyword()
-            if(keyword != null){
-                return keyword.range(source)
-            } else {
-                return TokenRange(
-                    start = source.pointer,
-                    token = KATEToken.ErrorToken("$word is not a keyword"),
-                    length = word.length
-                )
+    override fun lexTokenAtPosition(offset: Int): TokenRange? {
+        var x = offset
+        var text = ""
+        do {
+            // Checking if other lexers can handle this
+            var hasToken: TokenRange? = null
+            for (lexer in lexersList) {
+                val token = lexer.lexTokenAtPosition(x)
+                if (token != null) {
+                    if (x == offset) return token
+                    hasToken = token
+                    break
+                }
             }
-        } else {
-            val text = source.readTextAheadUntil { currChar, _ -> currChar == '@' || currChar == null }
-            KATEToken.DefaultNoRawString(text!!).range(source)
-        }
-    }
-
-    fun getState(): Int {
-        return if (parseDirectiveWord) 1 else 0
-    }
-
-    fun restoreState(state: Int) {
-        parseDirectiveWord = state == 1
+            if (hasToken != null) break
+            val currChar = source.lookAhead(x)
+            if (currChar != null) {
+                text += currChar
+                x++
+            }
+        } while (currChar != null)
+        if (source.hasEnded) return null
+        return source.range(offset, KATEToken.DefaultNoRawString(text))
     }
 
 }

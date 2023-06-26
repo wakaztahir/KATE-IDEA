@@ -42,7 +42,7 @@ class NewLexer : LexerBase() {
     }
 
     override fun advance() {
-        realLexer.incrementStream(currentToken!!)
+        currentToken!!.increment(realLexer.source)
         currentToken = realLexer.lexCurrentToken()
     }
 

@@ -1,9 +1,10 @@
 package com.github.wakaztahir.kateidea.lexer.states
 
-interface Lexer {
+import com.github.wakaztahir.kateidea.lexer.KATEToken
+import com.github.wakaztahir.kateidea.lexer.state.LexStateSaver
 
-    val hasLexed: Boolean
+interface Lexer : LexStateSaver {
 
-    fun lexTokenAtCurrentPosition(): TokenRange?
+    fun lexTokenAtPosition(offset : Int): TokenRange?
 
 }

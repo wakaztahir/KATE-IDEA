@@ -17,196 +17,196 @@ object KATETokens {
 
     // Language
 
-    val If = object : KATEToken.String("if", TokenType.Keyword) {
+    object If : KATEToken.String("if") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertIf(this)
+            return converter.convert(this)
         }
     }
 
-    val For = object : KATEToken.String("for", TokenType.Keyword) {
+    object For : KATEToken.String("for") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertFor(this)
+            return converter.convert(this)
         }
     }
 
-    val Var = object : KATEToken.String("var", TokenType.Keyword) {
+    object Var : KATEToken.String("var") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertVar(this)
+            return converter.convert(this)
         }
     }
 
-    val Function = object : KATEToken.String("function", TokenType.Keyword) {
+    object Function : KATEToken.String("function") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertFunction(this)
+            return converter.convert(this)
         }
     }
 
     // Operators
 
-    val Plus = object : KATEToken.Char('+', TokenType.OperationSign) {
+    object Plus : KATEToken.Char('+') {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertPlus(this)
+            return converter.convert(this)
         }
     }
 
-    val Minus = object : KATEToken.Char('-', TokenType.OperationSign) {
+    object Minus : KATEToken.Char('-') {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertMinus(this)
+            return converter.convert(this)
         }
     }
 
-    val Multiply = object : KATEToken.Char('*', TokenType.OperationSign) {
+    object Multiply : KATEToken.Char('*') {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertMultiply(this)
+            return converter.convert(this)
         }
     }
 
-    val Divide = object : KATEToken.Char('/', TokenType.OperationSign) {
+    object Divide : KATEToken.Char('/') {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertDivide(this)
+            return converter.convert(this)
         }
     }
 
-    val Modulus = object : KATEToken.Char('%', TokenType.OperationSign) {
+    object Modulus : KATEToken.Char('%') {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertModulus(this)
+            return converter.convert(this)
         }
     }
 
     // General
 
-    val LeftParenthesis = object : KATEToken.Char('(', TokenType.Parentheses) {
+    object LeftParenthesis : KATEToken.Char('(') {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertLeftParenthesis(this)
+            return converter.convert(this)
         }
     }
 
-    val RightParenthesis = object : KATEToken.Char(')', TokenType.Parentheses) {
+    object RightParenthesis : KATEToken.Char(')') {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertRightParenthesis(this)
+            return converter.convert(this)
         }
     }
 
-    val LeftBracket = object : KATEToken.Char('[', TokenType.Brackets) {
+    object LeftBracket : KATEToken.Char('[') {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertLeftBracket(this)
+            return converter.convert(this)
         }
     }
 
-    val RightBracket = object : KATEToken.Char(']', TokenType.Brackets) {
+    object RightBracket : KATEToken.Char(']') {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertRightBracket(this)
+            return converter.convert(this)
         }
     }
 
-    val LeftBrace = object : KATEToken.Char('{', TokenType.Braces) {
+    object LeftBrace : KATEToken.Char('{') {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertLeftBrace(this)
+            return converter.convert(this)
         }
     }
 
-    val RightBrace = object : KATEToken.Char('}', TokenType.Braces) {
+    object RightBrace : KATEToken.Char('}') {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertRightBrace(this)
+            return converter.convert(this)
         }
     }
 
-    val At = object : KATEToken.Char('@', TokenType.Keyword) {
+    object At : KATEToken.Char('@') {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertAt(this)
+            return converter.convert(this)
         }
     }
 
     // Comment
 
-    val CommentStart = object : KATEToken.String("<%--", TokenType.BlockComment) {
+    object CommentStart : KATEToken.String("<%--") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertCommentStart(this)
+            return converter.convert(this)
         }
     }
 
-    val CommentEnd = object : KATEToken.String("--%>", TokenType.BlockComment) {
+    object CommentEnd : KATEToken.String("--%>") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertCommentEnd(this)
+            return converter.convert(this)
         }
     }
 
     // Embed
 
-    val Embed = object : KATEToken.String("embed", TokenType.Keyword) {
+    object Embed : KATEToken.String("embed") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertEmbed(this)
+            return converter.convert(this)
         }
     }
 
-    val EmbedOnce = object : KATEToken.String("embed_once", TokenType.Keyword) {
+    object EmbedOnce : KATEToken.String("embed_once") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertEmbedOnce(this)
+            return converter.convert(this)
         }
     }
 
     // Placeholder
 
-    val PlaceholderUse = object : KATEToken.String("placeholder_use", TokenType.Keyword) {
+    object PlaceholderUse : KATEToken.String("placeholder_use") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertPlaceholderUse(this)
+            return converter.convert(this)
         }
     }
 
-    val Placeholder = object : KATEToken.String("placeholder", TokenType.Keyword) {
+    object Placeholder : KATEToken.String("placeholder") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertPlaceholder(this)
+            return converter.convert(this)
         }
     }
 
-    val DefinePlaceholder = object : KATEToken.String("define_placeholder", TokenType.Keyword) {
+    object DefinePlaceholder : KATEToken.String("define_placeholder") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertDefinePlaceholder(this)
+            return converter.convert(this)
         }
     }
 
-    val EndDefinePlaceholder = object : KATEToken.String("end_define_placeholder", TokenType.Keyword) {
+    object EndDefinePlaceholder : KATEToken.String("end_define_placeholder") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertEndDefinePlaceholder(this)
+            return converter.convert(this)
         }
     }
 
 
     // Modes
 
-    val DefaultNoRaw = object : KATEToken.String("default_no_raw", TokenType.Keyword) {
+    object DefaultNoRaw : KATEToken.String("default_no_raw") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertDefaultNoRaw(this)
+            return converter.convert(this)
         }
     }
 
-    val EndDefaultNoRaw = object : KATEToken.String("end_default_no_raw", TokenType.Keyword) {
+    object EndDefaultNoRaw : KATEToken.String("end_default_no_raw") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertEndDefaultNoRaw(this)
+            return converter.convert(this)
         }
     }
 
-    val PartialRaw = object : KATEToken.String("partial_raw", TokenType.Keyword) {
+    object PartialRaw : KATEToken.String("partial_raw") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertPartialRaw(this)
+            return converter.convert(this)
         }
     }
 
-    val EndPartialRaw = object : KATEToken.String("end_partial_raw", TokenType.Keyword) {
+    object EndPartialRaw : KATEToken.String("end_partial_raw") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertEndPartialRaw(this)
+            return converter.convert(this)
         }
     }
 
-    val Raw = object : KATEToken.String("raw", TokenType.Keyword) {
+    object Raw : KATEToken.String("raw") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertRaw(this)
+            return converter.convert(this)
         }
     }
 
-    val EndRaw = object : KATEToken.String("endraw", TokenType.Keyword) {
+    object EndRaw : KATEToken.String("endraw") {
         override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convertEndRaw(this)
+            return converter.convert(this)
         }
     }
 

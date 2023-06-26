@@ -2,63 +2,44 @@ package com.github.wakaztahir.kateidea.lexer
 
 import com.github.wakaztahir.kateidea.lexer.states.TokenRange
 import com.wakaztahir.kate.lexer.stream.SourceStream
-import com.wakaztahir.kate.lexer.stream.increment
 
 sealed interface KATEToken {
 
-    val type: TokenType
+    val length: Int
 
     fun <T> convert(converter: TokenConverter<T>): T
 
-    interface Ranger : KATEToken {
-        fun range(stream: SourceStream): TokenRange
+    abstract class String(val value: kotlin.String) : KATEToken {
+        override val length: Int
+            get() = value.length
     }
 
-    interface Static : Ranger {
-        fun increment(stream: SourceStream)
+    abstract class Char(val value: kotlin.Char) : KATEToken {
+        override val length: Int
+            get() = 1
     }
 
-    abstract class String(val value: kotlin.String, override val type: TokenType) : Static {
-
-        override fun increment(stream: SourceStream) {
-            stream.increment(value)
-        }
-
-        override fun range(stream: SourceStream): TokenRange {
-            return TokenRange(start = stream.pointer, token = this, length = value.length)
+    class ErrorToken(val message: kotlin.String, override val length: Int) : KATEToken {
+        override fun <T> convert(converter: TokenConverter<T>): T {
+            return converter.convert(this)
         }
     }
 
-    abstract class Char(val value: kotlin.Char, override val type: TokenType) : Static {
-
-        override fun increment(stream: SourceStream) {
-            stream.increment(value)
-        }
-
-        override fun range(stream: SourceStream): TokenRange {
-            return TokenRange(start = stream.pointer, token = this, length = 1)
-        }
-
-    }
-
-    class ErrorToken(val message: kotlin.String) : KATEToken {
-
-        override val type: TokenType = TokenType.BadCharacter
+    class DefaultNoRawString(val value: kotlin.String) : KATEToken {
+        override val length: Int
+            get() = value.length
 
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
-
     }
 
-    class DefaultNoRawString(val value: kotlin.String) : Ranger {
-        override val type: TokenType = TokenType.String
+    class CommentString(val value: kotlin.String) : KATEToken {
+        override val length: Int
+            get() = value.length
+
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
-        }
-
-        override fun range(stream: SourceStream): TokenRange {
-            return TokenRange(stream.pointer, this, value.length)
         }
     }
 

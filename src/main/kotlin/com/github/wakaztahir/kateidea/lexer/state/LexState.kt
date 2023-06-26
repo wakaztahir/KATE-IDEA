@@ -90,6 +90,11 @@ open class CompositeLexState : LexStateList {
         return state
     }
 
+    protected fun <T : LexStateSaver> state(value: List<T>): List<T> {
+        members.addAll(value)
+        return value
+    }
+
     protected fun state(value: Boolean) = makeState(BooleanLexState(value))
 
     protected fun state(value: Char) = makeState(CharLexState(value))

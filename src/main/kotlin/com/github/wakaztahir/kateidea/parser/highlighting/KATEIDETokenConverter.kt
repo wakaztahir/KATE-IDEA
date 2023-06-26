@@ -1,6 +1,7 @@
 package com.github.wakaztahir.kateidea.parser.highlighting
 
 import com.github.wakaztahir.kateidea.lexer.KATEToken
+import com.github.wakaztahir.kateidea.lexer.KATETokens
 import com.github.wakaztahir.kateidea.lexer.TokenConverter
 
 object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
@@ -9,127 +10,131 @@ object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
         return KATEIDEToken.Encapsulated(token)
     }
 
+    override fun convert(token: KATEToken.CommentString): KATEIDEToken {
+        return KATEIDEToken.Encapsulated(token)
+    }
+
     override fun convert(token: KATEToken.ErrorToken): KATEIDEToken {
         return KATEIDEToken.Encapsulated(token)
     }
 
-    override fun convertIf(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.If): KATEIDEToken {
         return KATEIDETokens.If
     }
 
-    override fun convertFor(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.For): KATEIDEToken {
         return KATEIDETokens.For
     }
 
-    override fun convertVar(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.Var): KATEIDEToken {
         return KATEIDETokens.Var
     }
 
-    override fun convertFunction(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.Function): KATEIDEToken {
         return KATEIDETokens.Function
     }
 
-    override fun convertPlus(token: KATEToken.Char): KATEIDEToken {
+    override fun convert(token: KATETokens.Plus): KATEIDEToken {
         return KATEIDETokens.Plus
     }
 
-    override fun convertMinus(token: KATEToken.Char): KATEIDEToken {
+    override fun convert(token: KATETokens.Minus): KATEIDEToken {
         return KATEIDETokens.Minus
     }
 
-    override fun convertMultiply(token: KATEToken.Char): KATEIDEToken {
+    override fun convert(token: KATETokens.Multiply): KATEIDEToken {
         return KATEIDETokens.Multiply
     }
 
-    override fun convertDivide(token: KATEToken.Char): KATEIDEToken {
+    override fun convert(token: KATETokens.Divide): KATEIDEToken {
         return KATEIDETokens.Divide
     }
 
-    override fun convertModulus(token: KATEToken.Char): KATEIDEToken {
+    override fun convert(token: KATETokens.Modulus): KATEIDEToken {
         return KATEIDETokens.Modulus
     }
 
-    override fun convertLeftParenthesis(token: KATEToken.Char): KATEIDEToken {
+    override fun convert(token: KATETokens.LeftParenthesis): KATEIDEToken {
         return KATEIDETokens.LeftParenthesis
     }
 
-    override fun convertRightParenthesis(token: KATEToken.Char): KATEIDEToken {
+    override fun convert(token: KATETokens.RightParenthesis): KATEIDEToken {
         return KATEIDETokens.RightParenthesis
     }
 
-    override fun convertLeftBracket(token: KATEToken.Char): KATEIDEToken {
+    override fun convert(token: KATETokens.LeftBracket): KATEIDEToken {
         return KATEIDETokens.LeftBracket
     }
 
-    override fun convertRightBracket(token: KATEToken.Char): KATEIDEToken {
+    override fun convert(token: KATETokens.RightBracket): KATEIDEToken {
         return KATEIDETokens.RightBracket
     }
 
-    override fun convertLeftBrace(token: KATEToken.Char): KATEIDEToken {
+    override fun convert(token: KATETokens.LeftBrace): KATEIDEToken {
         return KATEIDETokens.LeftBrace
     }
 
-    override fun convertRightBrace(token: KATEToken.Char): KATEIDEToken {
+    override fun convert(token: KATETokens.RightBrace): KATEIDEToken {
         return KATEIDETokens.RightBrace
     }
 
-    override fun convertAt(token: KATEToken.Char): KATEIDEToken {
+    override fun convert(token: KATETokens.At): KATEIDEToken {
         return KATEIDETokens.At
     }
 
-    override fun convertCommentStart(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.CommentStart): KATEIDEToken {
         return KATEIDETokens.CommentStart
     }
 
-    override fun convertCommentEnd(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.CommentEnd): KATEIDEToken {
         return KATEIDETokens.CommentEnd
     }
 
-    override fun convertEmbed(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.Embed): KATEIDEToken {
         return KATEIDETokens.Embed
     }
 
-    override fun convertEmbedOnce(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.EmbedOnce): KATEIDEToken {
         return KATEIDETokens.EmbedOnce
     }
 
-    override fun convertPlaceholderUse(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.PlaceholderUse): KATEIDEToken {
         return KATEIDETokens.PlaceholderUse
     }
 
-    override fun convertPlaceholder(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.Placeholder): KATEIDEToken {
         return KATEIDETokens.Placeholder
     }
 
-    override fun convertDefinePlaceholder(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.DefinePlaceholder): KATEIDEToken {
         return KATEIDETokens.DefinePlaceholder
     }
 
-    override fun convertEndDefinePlaceholder(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.EndDefinePlaceholder): KATEIDEToken {
         return KATEIDETokens.EndDefinePlaceholder
     }
 
-    override fun convertDefaultNoRaw(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.DefaultNoRaw): KATEIDEToken {
         return KATEIDETokens.DefaultNoRaw
     }
 
-    override fun convertEndDefaultNoRaw(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.EndDefaultNoRaw): KATEIDEToken {
         return KATEIDETokens.EndDefaultNoRaw
     }
 
-    override fun convertPartialRaw(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.PartialRaw): KATEIDEToken {
         return KATEIDETokens.PartialRaw
     }
 
-    override fun convertEndPartialRaw(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.EndPartialRaw): KATEIDEToken {
         return KATEIDETokens.EndPartialRaw
     }
 
-    override fun convertRaw(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.Raw): KATEIDEToken {
         return KATEIDETokens.Raw
     }
 
-    override fun convertEndRaw(token: KATEToken.String): KATEIDEToken {
+    override fun convert(token: KATETokens.EndRaw): KATEIDEToken {
         return KATEIDETokens.EndRaw
     }
 
