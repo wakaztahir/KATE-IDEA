@@ -6,7 +6,7 @@ import com.github.wakaztahir.kateidea.lexer.TokenConverter
 
 object TokenHighlighterConverter : TokenConverter<HighlightingAttributeKeys> {
 
-    override fun convert(token: KATEToken.DefaultNoRawString): HighlightingAttributeKeys {
+    override fun convert(token: KATEToken.OutputString): HighlightingAttributeKeys {
         return HighlightingAttributeKeys.String
     }
 

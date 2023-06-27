@@ -1,8 +1,23 @@
 package com.github.wakaztahir.kateidea.lexer
 
+import com.wakaztahir.kate.lexer.model.StaticToken
 import com.wakaztahir.kate.lexer.stream.SourceStream
 import com.wakaztahir.kate.lexer.stream.isAtCurrentPosition
 import com.wakaztahir.kate.lexer.stream.readTextAheadUntil
+
+// ----------- Char Utils
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun SourceStream.isAtCurrentPosition(offset: Int, char: Char): Boolean {
+    return lookAhead(offset = offset) == char
+}
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun SourceStream.isAtCurrentPosition(offset: Int, token: StaticToken.Char): Boolean {
+    return isAtCurrentPosition(offset = offset, char = token.representation)
+}
+
+// ------------- String Utils
 
 fun SourceStream.isAtCurrentPositionText(offset: Int, text: String): Boolean {
     var x = 0
@@ -18,6 +33,23 @@ fun SourceStream.isAtCurrentPositionText(offset: Int, text: String): Boolean {
     return x == text.length
 }
 
+fun SourceStream.readTextAheadUntilLambdaOrStreamEnds(
+    offset: Int,
+    stopIf: (currChar: Char, offset: Int) -> Boolean
+): String? {
+    var parsedText = ""
+    var x = offset
+    do {
+        val currChar = lookAhead(x)
+        if (currChar != null && stopIf(currChar, x)) {
+            return parsedText
+        } else if (currChar != null) {
+            parsedText += currChar
+        }
+        x++
+    } while (currChar != null)
+    return parsedText.ifEmpty { null }
+}
 
 fun SourceStream.readTextAheadUntil(offset: Int, stopIf: (currChar: Char?, offset: Int) -> Boolean): String? {
     var parsedText = ""

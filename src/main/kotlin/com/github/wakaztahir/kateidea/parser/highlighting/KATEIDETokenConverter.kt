@@ -6,7 +6,7 @@ import com.github.wakaztahir.kateidea.lexer.TokenConverter
 
 object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
 
-    override fun convert(token: KATEToken.DefaultNoRawString): KATEIDEToken {
+    override fun convert(token: KATEToken.OutputString): KATEIDEToken {
         return KATEIDEToken.Encapsulated(token)
     }
 

@@ -9,5 +9,15 @@ inline fun SourceStream.range(
     token: KATEToken,
     noinline onIncrement: (() -> Unit)? = null
 ): TokenRange {
-    return TokenRange(start = pointer + offset, token = token, onIncrement = onIncrement)
+    return TokenRange(start = pointer + offset, token = token, length = token.length, onIncrement = onIncrement)
+}
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun SourceStream.range(
+    offset: Int,
+    lengthOffset : Int,
+    token: KATEToken,
+    noinline onIncrement: (() -> Unit)? = null
+): TokenRange {
+    return TokenRange(start = pointer + offset, token = token, length = token.length + lengthOffset, onIncrement = onIncrement)
 }

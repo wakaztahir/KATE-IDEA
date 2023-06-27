@@ -2,7 +2,7 @@ package com.github.wakaztahir.kateidea.lexer
 
 interface TokenConverter<T> {
 
-    fun convert(token : KATEToken.DefaultNoRawString) : T
+    fun convert(token : KATEToken.OutputString) : T
 
     fun convert(token : KATEToken.CommentString) : T
 

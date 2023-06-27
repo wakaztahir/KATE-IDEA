@@ -1,8 +1,5 @@
 package com.github.wakaztahir.kateidea.lexer
 
-import com.github.wakaztahir.kateidea.lexer.states.TokenRange
-import com.wakaztahir.kate.lexer.stream.SourceStream
-
 sealed interface KATEToken {
 
     val length: Int
@@ -25,7 +22,7 @@ sealed interface KATEToken {
         }
     }
 
-    class DefaultNoRawString(val value: kotlin.String) : KATEToken {
+    class OutputString(val value: kotlin.String) : KATEToken {
         override val length: Int
             get() = value.length
 

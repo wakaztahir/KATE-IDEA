@@ -7,9 +7,11 @@ interface LexStateSaver {
     fun restoreState(state: Int)
 }
 
-interface LexState<T> {
+interface LexState<T : Any?> {
     var state: T
 }
+
+interface LexSaveableState<T> : LexState<T>, LexStateSaver
 
 @Suppress("NOTHING_TO_INLINE")
 inline operator fun <T> LexState<T>.getValue(container: Any, property: KProperty<*>): T {
@@ -44,14 +46,55 @@ interface LexStateList : LexStateSaver {
 
 }
 
-class IntLexState(override var state: Int) : LexState<Int>, LexStateSaver {
+class EnumState<T : Enum<T>>(override var state: T, private val values: Array<T>) : LexSaveableState<T> {
+
+    override fun toState(): Int {
+        return state.ordinal
+    }
+
+    override fun restoreState(state: Int) {
+        for (value in values) {
+            if (value.ordinal == state) {
+                this.state = value
+                return
+            }
+        }
+        throw IllegalStateException("Enum State couldn't be restored from ordinal $state because of missing ordinal in values $values")
+    }
+
+}
+
+//class DerivedState<T : Any?, K : Any?>(
+//    initializer: T,
+//    private val backing: LexSaveableState<K>,
+//    private val convert: (T) -> K,
+//    private val restore: (K) -> T,
+//) : LexStateSaver, LexState<T> {
+//
+//    override var state: T = initializer
+//        set(value) {
+//            field = value
+//            backing.state = convert(value)
+//        }
+//
+//    override fun toState(): Int {
+//        return backing.toState()
+//    }
+//
+//    override fun restoreState(state: Int) {
+//        backing.restoreState(state)
+//        this.state = restore(backing.state)
+//    }
+//}
+
+class IntLexState(override var state: Int) : LexSaveableState<Int> {
     override fun toState() = state
     override fun restoreState(state: Int) {
         this.state = state
     }
 }
 
-class BooleanLexState(override var state: Boolean) : LexState<Boolean>, LexStateSaver {
+class BooleanLexState(override var state: Boolean) : LexSaveableState<Boolean> {
     override fun toState(): Int {
         return if (state) 1 else 0
     }
@@ -61,7 +104,7 @@ class BooleanLexState(override var state: Boolean) : LexState<Boolean>, LexState
     }
 }
 
-class CharLexState(override var state: Char) : LexState<Char>, LexStateSaver {
+class CharLexState(override var state: Char) : LexSaveableState<Char> {
     override fun toState(): Int {
         return state.code
     }
@@ -85,7 +128,7 @@ open class CompositeLexState : LexStateList {
 
     override val members: MutableList<LexStateSaver> = mutableListOf()
 
-    private fun <T : LexStateSaver> makeState(state: T): T {
+    protected fun <T : LexStateSaver> state(state: T): T {
         members.add(state)
         return state
     }
@@ -95,12 +138,21 @@ open class CompositeLexState : LexStateList {
         return value
     }
 
-    protected fun state(value: Boolean) = makeState(BooleanLexState(value))
+    fun <T : Enum<T>> state(value: EnumState<T>): EnumState<T> {
+        members.add(value)
+        return value
+    }
 
-    protected fun state(value: Char) = makeState(CharLexState(value))
+    protected fun state(value: Boolean) = state(BooleanLexState(value))
 
-    protected fun state(value: Int) = makeState(IntLexState(value))
+    protected fun state(value: Char) = state(CharLexState(value))
 
-    protected fun state(value: Float) = makeState(FloatLexState(value))
+    protected fun state(value: Int) = state(IntLexState(value))
 
+    protected fun state(value: Float) = state(FloatLexState(value))
+
+}
+
+inline fun <reified T : Enum<T>> CompositeLexState.state(enum: T): EnumState<T> {
+    return state(EnumState(enum, enumValues<T>()))
 }

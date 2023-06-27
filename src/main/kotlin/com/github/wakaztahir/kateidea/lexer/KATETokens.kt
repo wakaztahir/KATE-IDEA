@@ -2,19 +2,6 @@ package com.github.wakaztahir.kateidea.lexer
 
 object KATETokens {
 
-    private fun MutableMap<String, KATEToken.String>.put(vararg tokens: KATEToken.String) {
-        for (token in tokens) this[token.value] = token
-    }
-
-    val KeywordsMap by lazy {
-        hashMapOf<String, KATEToken.String>().apply {
-            put(
-                If, For, Var, Function, Embed, EmbedOnce, Placeholder, PlaceholderUse, DefinePlaceholder,
-                EndDefinePlaceholder, DefaultNoRaw, EndDefaultNoRaw, PartialRaw, EndPartialRaw, Raw, EndRaw,
-            )
-        }
-    }
-
     // Language
 
     object If : KATEToken.String("if") {

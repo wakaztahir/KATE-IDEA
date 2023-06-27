@@ -6,13 +6,14 @@ import com.wakaztahir.kate.lexer.stream.SourceStream
 data class TokenRange(
     val start: Int,
     val token: KATEToken,
+    val length: Int,
     private val onIncrement: (() -> Unit)?,
 ) {
 
-    val end get() = start + token.length
+    val end get() = start + length
 
     fun increment(source: SourceStream) {
-        source.incrementPointer(token.length)
+        source.incrementPointer(length)
         onIncrement?.invoke()
     }
 

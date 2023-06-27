@@ -4,7 +4,6 @@ import com.github.wakaztahir.kateidea.lexer.KATEToken
 import com.github.wakaztahir.kateidea.lexer.range
 import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
 import com.wakaztahir.kate.lexer.stream.SourceStream
-import com.wakaztahir.kate.lexer.stream.readTextAheadUntil
 
 class DefaultNoRawLexer(
     private val source: SourceStream,
@@ -14,7 +13,7 @@ class DefaultNoRawLexer(
     private val lexersList: List<Lexer> = state(
         listOf(
             CommentLexer(source),
-            KeywordLexer(source)
+            RawLexer(source, isDefaultNoRaw = true)
         )
     )
 
@@ -40,7 +39,7 @@ class DefaultNoRawLexer(
             }
         } while (currChar != null)
         if (source.hasEnded) return null
-        return source.range(offset, KATEToken.DefaultNoRawString(text))
+        return source.range(offset, KATEToken.OutputString(text))
     }
 
 }
