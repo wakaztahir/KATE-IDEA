@@ -38,6 +38,14 @@ enum class HighlightingAttributeKeys {
         override val colorKeys by lazy { arrayOf(DefaultLanguageHighlighterColors.STRING) }
     },
 
+    ValidStringEscape {
+        override val colorKeys by lazy  { arrayOf(DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE) }
+    },
+
+    InvalidStringEscape {
+        override val colorKeys by lazy  { arrayOf(DefaultLanguageHighlighterColors.INVALID_STRING_ESCAPE) }
+    },
+
     BlockComment {
         override val colorKeys by lazy { arrayOf(DefaultLanguageHighlighterColors.BLOCK_COMMENT) }
     },

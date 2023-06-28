@@ -2,13 +2,27 @@ package com.github.wakaztahir.kateidea.lexer
 
 interface TokenConverter<T> {
 
-    fun convert(token: KATEToken.Identifier) : T
+    fun convert(token : KATEToken.StringEscape) : T
 
-    fun convert(token : KATEToken.BadCharacter) : T
+    fun convert(token : KATEToken.StringValue) : T
 
-    fun convert(token : KATEToken.Whitespace) : T
+    fun convert(token: KATEToken.IntValue): T
 
-    fun convert(token : KATEToken.ArithmeticOperator) : T
+    fun convert(token: KATEToken.DoubleValue): T
+
+    fun convert(token: KATEToken.LongValue): T
+
+    fun convert(token: KATEToken.CharValue): T
+
+    fun convert(token: KATEToken.BooleanValue): T
+
+    fun convert(token: KATEToken.Identifier): T
+
+    fun convert(token: KATEToken.BadCharacter): T
+
+    fun convert(token: KATEToken.Whitespace): T
+
+    fun convert(token: KATEToken.ArithmeticOperator): T
 
     fun convert(token: KATEToken.OutputString): T
 
@@ -34,7 +48,7 @@ interface TokenConverter<T> {
 //
 //    fun convert(token: KATETokens.Modulus): T
 
-    fun convert(token : KATETokens.SingleEqual) : T
+    fun convert(token: KATETokens.SingleEqual): T
 
     fun convert(token: KATETokens.LeftParenthesis): T
 

@@ -5,8 +5,8 @@ import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
 import com.github.wakaztahir.kateidea.lexer.state.getValue
 import com.github.wakaztahir.kateidea.lexer.state.setValue
 import com.github.wakaztahir.kateidea.lexer.state.state
+import com.github.wakaztahir.kateidea.lexer.states.value.PrimitiveValueLexer
 import com.wakaztahir.kate.lexer.stream.SourceStream
-import com.wakaztahir.kate.model.expression.ArithmeticOperatorType
 
 class VariableDeclarationLexer(
     private val source: SourceStream,
@@ -22,8 +22,7 @@ class VariableDeclarationLexer(
     }
 
     private var state by state(State.None)
-
-    lateinit var valueLexer: ValueLexer
+    private val valueLexer by lazyState { PrimitiveValueLexer(source) }
 
     private fun resetState() {
         state = State.None
@@ -57,7 +56,6 @@ class VariableDeclarationLexer(
                         '=' -> {
                             return source.range(offset, KATETokens.SingleEqual) {
                                 state = State.Value
-                                valueLexer = ValueLexer(source = source, isDefaultNoRaw = isDefaultNoRaw)
                             }
                         }
 
@@ -81,8 +79,12 @@ class VariableDeclarationLexer(
             State.Value -> {
                 source.lexWhitespaces(offset)?.let { return it }
                 valueLexer.lexTokenAtPosition(offset)?.let {
-                    resetState()
-                    return it
+                    return it.copy(
+                        onIncrement = {
+                            it.onIncrement?.invoke()
+                            if (!valueLexer.isLexing()) resetState()
+                        }
+                    )
                 }
                 return source.lexAsBadCharacters(offset)
             }

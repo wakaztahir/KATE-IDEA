@@ -6,6 +6,38 @@ import com.github.wakaztahir.kateidea.lexer.TokenConverter
 
 object TokenHighlighterConverter : TokenConverter<HighlightingAttributeKeys> {
 
+    override fun convert(token: KATEToken.StringEscape): HighlightingAttributeKeys {
+        return if(token.isValid){
+            HighlightingAttributeKeys.ValidStringEscape
+        } else {
+            HighlightingAttributeKeys.InvalidStringEscape
+        }
+    }
+
+    override fun convert(token: KATEToken.StringValue): HighlightingAttributeKeys {
+        return HighlightingAttributeKeys.String
+    }
+
+    override fun convert(token: KATEToken.IntValue): HighlightingAttributeKeys {
+        return HighlightingAttributeKeys.Number
+    }
+
+    override fun convert(token: KATEToken.DoubleValue): HighlightingAttributeKeys {
+        return HighlightingAttributeKeys.Number
+    }
+
+    override fun convert(token: KATEToken.LongValue): HighlightingAttributeKeys {
+        return HighlightingAttributeKeys.Number
+    }
+
+    override fun convert(token: KATEToken.CharValue): HighlightingAttributeKeys {
+        return HighlightingAttributeKeys.String
+    }
+
+    override fun convert(token: KATEToken.BooleanValue): HighlightingAttributeKeys {
+        return HighlightingAttributeKeys.Keyword
+    }
+
     override fun convert(token: KATEToken.Identifier): HighlightingAttributeKeys {
         return HighlightingAttributeKeys.Identifier
     }

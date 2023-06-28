@@ -6,6 +6,34 @@ import com.github.wakaztahir.kateidea.lexer.TokenConverter
 
 object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
 
+    override fun convert(token: KATEToken.StringEscape): KATEIDEToken {
+        return KATEIDEToken.Encapsulated(token)
+    }
+
+    override fun convert(token: KATEToken.StringValue): KATEIDEToken {
+        return KATEIDEToken.Encapsulated(token)
+    }
+
+    override fun convert(token: KATEToken.IntValue): KATEIDEToken {
+        return KATEIDEToken.Encapsulated(token)
+    }
+
+    override fun convert(token: KATEToken.DoubleValue): KATEIDEToken {
+        return KATEIDEToken.Encapsulated(token)
+    }
+
+    override fun convert(token: KATEToken.LongValue): KATEIDEToken {
+        return KATEIDEToken.Encapsulated(token)
+    }
+
+    override fun convert(token: KATEToken.CharValue): KATEIDEToken {
+        return KATEIDEToken.Encapsulated(token)
+    }
+
+    override fun convert(token: KATEToken.BooleanValue): KATEIDEToken {
+        return KATEIDEToken.Encapsulated(token)
+    }
+
     override fun convert(token: KATEToken.Identifier): KATEIDEToken {
         return KATEIDEToken.Encapsulated(token)
     }

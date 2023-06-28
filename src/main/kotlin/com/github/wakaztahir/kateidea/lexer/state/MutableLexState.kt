@@ -8,10 +8,16 @@ interface LexStateSaver {
 }
 
 interface LexState<T : Any?> {
-    var state: T
+    val state: T
+}
+
+interface MutableLexState<T : Any?> : LexState<T> {
+    override var state: T
 }
 
 interface LexSaveableState<T> : LexState<T>, LexStateSaver
+
+interface MutableLexSaveableState<T> : MutableLexState<T>, LexSaveableState<T>
 
 @Suppress("NOTHING_TO_INLINE")
 inline operator fun <T> LexState<T>.getValue(container: Any, property: KProperty<*>): T {
@@ -19,7 +25,7 @@ inline operator fun <T> LexState<T>.getValue(container: Any, property: KProperty
 }
 
 @Suppress("NOTHING_TO_INLINE")
-inline operator fun <T> LexState<T>.setValue(container: Any, property: KProperty<*>, value: T) {
+inline operator fun <T> MutableLexState<T>.setValue(container: Any, property: KProperty<*>, value: T) {
     this.state = value
 }
 
@@ -46,7 +52,7 @@ interface LexStateList : LexStateSaver {
 
 }
 
-class EnumState<T : Enum<T>>(override var state: T, private val values: Array<T>) : LexSaveableState<T> {
+class EnumState<T : Enum<T>>(override var state: T, private val values: Array<T>) : MutableLexSaveableState<T> {
 
     override fun toState(): Int {
         return state.ordinal
@@ -87,14 +93,34 @@ class EnumState<T : Enum<T>>(override var state: T, private val values: Array<T>
 //    }
 //}
 
-class IntLexState(override var state: Int) : LexSaveableState<Int> {
+class LazyLexState<T : LexStateSaver>(creator: () -> T) : LexSaveableState<T> {
+
+    private val value: Lazy<T> = lazy(creator)
+
+    override val state: T get() = value.value
+
+    fun isInitialized() : Boolean {
+        return value.isInitialized()
+    }
+
+    override fun toState(): Int {
+        return value.value.toState()
+    }
+
+    override fun restoreState(state: Int) {
+        this.value.value.restoreState(state)
+    }
+
+}
+
+class IntLexState(override var state: Int) : MutableLexSaveableState<Int> {
     override fun toState() = state
     override fun restoreState(state: Int) {
         this.state = state
     }
 }
 
-class BooleanLexState(override var state: Boolean) : LexSaveableState<Boolean> {
+class BooleanLexState(override var state: Boolean) : MutableLexSaveableState<Boolean> {
     override fun toState(): Int {
         return if (state) 1 else 0
     }
@@ -104,7 +130,7 @@ class BooleanLexState(override var state: Boolean) : LexSaveableState<Boolean> {
     }
 }
 
-class CharLexState(override var state: Char) : LexSaveableState<Char> {
+class CharLexState(override var state: Char) : MutableLexSaveableState<Char> {
     override fun toState(): Int {
         return state.code
     }
@@ -114,7 +140,7 @@ class CharLexState(override var state: Char) : LexSaveableState<Char> {
     }
 }
 
-class FloatLexState(override var state: Float) : LexState<Float>, LexStateSaver {
+class FloatLexState(override var state: Float) : MutableLexState<Float>, LexStateSaver {
     override fun toState(): Int {
         return state.toRawBits()
     }
@@ -141,6 +167,12 @@ open class CompositeLexState : LexStateList {
     fun <T : Enum<T>> state(value: EnumState<T>): EnumState<T> {
         members.add(value)
         return value
+    }
+
+    protected fun <T : LexStateSaver> lazyState(value: () -> T): LazyLexState<T> {
+        val actual = LazyLexState(value)
+        members.add(actual)
+        return actual
     }
 
     protected fun state(value: Boolean) = state(BooleanLexState(value))
