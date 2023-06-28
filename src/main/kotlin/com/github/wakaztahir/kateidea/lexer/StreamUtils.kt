@@ -41,12 +41,14 @@ fun SourceStream.readTextAheadUntilLambdaOrStreamEnds(
     var x = offset
     do {
         val currChar = lookAhead(x)
-        if (currChar != null && stopIf(currChar, x)) {
-            return parsedText
-        } else if (currChar != null) {
-            parsedText += currChar
+        if (currChar != null) {
+            if (stopIf(currChar, x)) {
+                return parsedText.ifEmpty { null }
+            } else {
+                parsedText += currChar
+            }
+            x++
         }
-        x++
     } while (currChar != null)
     return parsedText.ifEmpty { null }
 }
@@ -76,7 +78,7 @@ inline fun SourceStream.readTextAheadUntil(offset: Int, stopAt: String): String?
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun SourceStream.readSingleWordAhead(offset: Int): String? {
-    return readTextAheadUntil(offset = offset) { currChar, _ -> currChar == ' ' || currChar == null || currChar == '\n' }?.ifEmpty { null }
+    return readTextAheadUntilLambdaOrStreamEnds(offset = offset) { currChar, _ -> currChar == ' ' || currChar == '\n' }
 }
 
 @Suppress("NOTHING_TO_INLINE")

@@ -16,34 +16,16 @@ class RawLexer(private val source: SourceStream, private val isDefaultNoRaw: Boo
         hasLexedRawText = false
     }
 
-    private fun SourceStream.directiveRangeAtPosition(
-        offset: Int,
-        directive: KATEToken.String,
-        onIncrement: (() -> Unit)?
-    ): TokenRange? {
-        val startOffset = if (isAtCurrentPosition(offset = offset, KATETokens.At.value)) 1 else {
-            if (isDefaultNoRaw) return null else 0
-        }
-        if (isAtCurrentPositionText(offset = offset + startOffset, directive.value)) {
-            return source.range(
-                offset = offset,
-                lengthOffset = startOffset,
-                token = directive,
-                onIncrement = onIncrement
-            )
-        }
-        return null
-    }
-
     override fun lexTokenAtPosition(offset: Int): TokenRange? {
         if (isLexingRaw) {
             if (hasLexedRawText) {
-                return source.directiveRangeAtPosition(offset, KATETokens.EndRaw) {
+                return source.directiveRangeAtPosition(isDefaultNoRaw, offset, KATETokens.EndRaw) {
                     resetState()
                 }
             }
             val text = source.readTextAheadUntilLambdaOrStreamEnds(offset = offset) { currChar, aheadOffset ->
                 source.directiveRangeAtPosition(
+                    isDefaultNoRaw = isDefaultNoRaw,
                     offset = aheadOffset,
                     directive = KATETokens.EndRaw,
                     onIncrement = null
@@ -55,7 +37,7 @@ class RawLexer(private val source: SourceStream, private val isDefaultNoRaw: Boo
                 }
             }
         }
-        return source.directiveRangeAtPosition(offset, KATETokens.Raw) {
+        return source.directiveRangeAtPosition(isDefaultNoRaw, offset, KATETokens.Raw) {
             isLexingRaw = true
         }
     }

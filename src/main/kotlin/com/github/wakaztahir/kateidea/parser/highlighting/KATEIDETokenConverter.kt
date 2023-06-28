@@ -6,6 +6,22 @@ import com.github.wakaztahir.kateidea.lexer.TokenConverter
 
 object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
 
+    override fun convert(token: KATEToken.Identifier): KATEIDEToken {
+        return KATEIDEToken.Encapsulated(token)
+    }
+
+    override fun convert(token: KATEToken.BadCharacter): KATEIDEToken {
+        return KATEIDEToken.Encapsulated(token)
+    }
+
+    override fun convert(token: KATEToken.Whitespace): KATEIDEToken {
+        return KATEIDEToken.Encapsulated(token)
+    }
+
+    override fun convert(token: KATEToken.ArithmeticOperator): KATEIDEToken {
+        return KATEIDEToken.Encapsulated(token)
+    }
+
     override fun convert(token: KATEToken.OutputString): KATEIDEToken {
         return KATEIDEToken.Encapsulated(token)
     }
@@ -34,25 +50,29 @@ object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
         return KATEIDETokens.Function
     }
 
-    override fun convert(token: KATETokens.Plus): KATEIDEToken {
-        return KATEIDETokens.Plus
+    override fun convert(token: KATETokens.SingleEqual): KATEIDEToken {
+        return KATEIDETokens.SingleEqual
     }
 
-    override fun convert(token: KATETokens.Minus): KATEIDEToken {
-        return KATEIDETokens.Minus
-    }
-
-    override fun convert(token: KATETokens.Multiply): KATEIDEToken {
-        return KATEIDETokens.Multiply
-    }
-
-    override fun convert(token: KATETokens.Divide): KATEIDEToken {
-        return KATEIDETokens.Divide
-    }
-
-    override fun convert(token: KATETokens.Modulus): KATEIDEToken {
-        return KATEIDETokens.Modulus
-    }
+//    override fun convert(token: KATETokens.Plus): KATEIDEToken {
+//        return KATEIDETokens.Plus
+//    }
+//
+//    override fun convert(token: KATETokens.Minus): KATEIDEToken {
+//        return KATEIDETokens.Minus
+//    }
+//
+//    override fun convert(token: KATETokens.Multiply): KATEIDEToken {
+//        return KATEIDETokens.Multiply
+//    }
+//
+//    override fun convert(token: KATETokens.Divide): KATEIDEToken {
+//        return KATEIDETokens.Divide
+//    }
+//
+//    override fun convert(token: KATETokens.Modulus): KATEIDEToken {
+//        return KATEIDETokens.Modulus
+//    }
 
     override fun convert(token: KATETokens.LeftParenthesis): KATEIDEToken {
         return KATEIDETokens.LeftParenthesis

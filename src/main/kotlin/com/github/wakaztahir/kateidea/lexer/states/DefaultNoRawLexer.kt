@@ -13,7 +13,8 @@ class DefaultNoRawLexer(
     private val lexersList: List<Lexer> = state(
         listOf(
             CommentLexer(source),
-            RawLexer(source, isDefaultNoRaw = true)
+            RawLexer(source, isDefaultNoRaw = true),
+            VariableDeclarationLexer(source,isDefaultNoRaw = true)
         )
     )
 

@@ -30,37 +30,43 @@ object KATETokens {
 
     // Operators
 
-    object Plus : KATEToken.Char('+') {
-        override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convert(this)
-        }
-    }
-
-    object Minus : KATEToken.Char('-') {
-        override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convert(this)
-        }
-    }
-
-    object Multiply : KATEToken.Char('*') {
-        override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convert(this)
-        }
-    }
-
-    object Divide : KATEToken.Char('/') {
-        override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convert(this)
-        }
-    }
-
-    object Modulus : KATEToken.Char('%') {
-        override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convert(this)
-        }
-    }
+//    object Plus : KATEToken.Char('+') {
+//        override fun <T> convert(converter: TokenConverter<T>): T {
+//            return converter.convert(this)
+//        }
+//    }
+//
+//    object Minus : KATEToken.Char('-') {
+//        override fun <T> convert(converter: TokenConverter<T>): T {
+//            return converter.convert(this)
+//        }
+//    }
+//
+//    object Multiply : KATEToken.Char('*') {
+//        override fun <T> convert(converter: TokenConverter<T>): T {
+//            return converter.convert(this)
+//        }
+//    }
+//
+//    object Divide : KATEToken.Char('/') {
+//        override fun <T> convert(converter: TokenConverter<T>): T {
+//            return converter.convert(this)
+//        }
+//    }
+//
+//    object Modulus : KATEToken.Char('%') {
+//        override fun <T> convert(converter: TokenConverter<T>): T {
+//            return converter.convert(this)
+//        }
+//    }
 
     // General
+
+    object SingleEqual : KATEToken.Char('=') {
+        override fun <T> convert(converter: TokenConverter<T>): T {
+            return converter.convert(this)
+        }
+    }
 
     object LeftParenthesis : KATEToken.Char('(') {
         override fun <T> convert(converter: TokenConverter<T>): T {

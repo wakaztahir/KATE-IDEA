@@ -6,6 +6,22 @@ import com.github.wakaztahir.kateidea.lexer.TokenConverter
 
 object TokenHighlighterConverter : TokenConverter<HighlightingAttributeKeys> {
 
+    override fun convert(token: KATEToken.Identifier): HighlightingAttributeKeys {
+        return HighlightingAttributeKeys.Identifier
+    }
+
+    override fun convert(token: KATEToken.BadCharacter): HighlightingAttributeKeys {
+        return HighlightingAttributeKeys.BadCharacter
+    }
+
+    override fun convert(token: KATEToken.Whitespace): HighlightingAttributeKeys {
+        return HighlightingAttributeKeys.None
+    }
+
+    override fun convert(token: KATEToken.ArithmeticOperator): HighlightingAttributeKeys {
+        return HighlightingAttributeKeys.OperationSign
+    }
+
     override fun convert(token: KATEToken.OutputString): HighlightingAttributeKeys {
         return HighlightingAttributeKeys.String
     }
@@ -34,25 +50,29 @@ object TokenHighlighterConverter : TokenConverter<HighlightingAttributeKeys> {
         return HighlightingAttributeKeys.Keyword
     }
 
-    override fun convert(token: KATETokens.Plus): HighlightingAttributeKeys {
+    override fun convert(token: KATETokens.SingleEqual): HighlightingAttributeKeys {
         return HighlightingAttributeKeys.OperationSign
     }
 
-    override fun convert(token: KATETokens.Minus): HighlightingAttributeKeys {
-        return HighlightingAttributeKeys.OperationSign
-    }
-
-    override fun convert(token: KATETokens.Multiply): HighlightingAttributeKeys {
-        return HighlightingAttributeKeys.OperationSign
-    }
-
-    override fun convert(token: KATETokens.Divide): HighlightingAttributeKeys {
-        return HighlightingAttributeKeys.OperationSign
-    }
-
-    override fun convert(token: KATETokens.Modulus): HighlightingAttributeKeys {
-        return HighlightingAttributeKeys.OperationSign
-    }
+//    override fun convert(token: KATETokens.Plus): HighlightingAttributeKeys {
+//        return HighlightingAttributeKeys.OperationSign
+//    }
+//
+//    override fun convert(token: KATETokens.Minus): HighlightingAttributeKeys {
+//        return HighlightingAttributeKeys.OperationSign
+//    }
+//
+//    override fun convert(token: KATETokens.Multiply): HighlightingAttributeKeys {
+//        return HighlightingAttributeKeys.OperationSign
+//    }
+//
+//    override fun convert(token: KATETokens.Divide): HighlightingAttributeKeys {
+//        return HighlightingAttributeKeys.OperationSign
+//    }
+//
+//    override fun convert(token: KATETokens.Modulus): HighlightingAttributeKeys {
+//        return HighlightingAttributeKeys.OperationSign
+//    }
 
     override fun convert(token: KATETokens.LeftParenthesis): HighlightingAttributeKeys {
         return HighlightingAttributeKeys.Parentheses
