@@ -8,7 +8,7 @@ import com.github.wakaztahir.kateidea.lexer.state.state
 import com.github.wakaztahir.kateidea.lexer.states.value.PrimitiveValueLexer
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
-class VariableDeclarationLexer(
+class VariableAssignmentLexer(
     private val source: SourceStream,
     private val isDefaultNoRaw: Boolean
 ) : Lexer, CompositeLexState() {
@@ -16,6 +16,7 @@ class VariableDeclarationLexer(
     enum class State {
         None,
         VariableName,
+        OperatorOrEqual,
         EqualOnly,
         Value
     }
@@ -30,7 +31,7 @@ class VariableDeclarationLexer(
     override fun lexTokenAtPosition(offset: Int): TokenRange? {
         when (state) {
             State.None -> {
-                return source.directiveRangeAtPosition(isDefaultNoRaw, offset, KATETokens.Var) {
+                return source.directiveRangeAtPosition(isDefaultNoRaw, offset, KATETokens.SetVar) {
                     state = State.VariableName
                 }
             }
@@ -40,12 +41,12 @@ class VariableDeclarationLexer(
                 val word = source.readSingleWordAhead(offset = offset)
                 return word?.let {
                     source.range(offset, KATEToken.Identifier(it)) {
-                        state = State.EqualOnly
+                        state = State.OperatorOrEqual
                     }
                 }
             }
 
-            State.EqualOnly -> {
+            State.OperatorOrEqual, State.EqualOnly -> {
                 return source.lookAhead(offset)?.let { char ->
                     when (char) {
                         ' ' -> {
@@ -55,6 +56,16 @@ class VariableDeclarationLexer(
                         '=' -> {
                             return source.range(offset, KATETokens.SingleEqual) {
                                 state = State.Value
+                            }
+                        }
+
+                        '+', '-', '*', '/', '%' -> {
+                            if (state == State.EqualOnly) {
+                                return source.range(offset, KATEToken.BadCharacter(1), null)
+                            } else {
+                                return source.range(offset, KATEToken.ArithmeticOperator(char)) {
+                                    state = State.EqualOnly
+                                }
                             }
                         }
 

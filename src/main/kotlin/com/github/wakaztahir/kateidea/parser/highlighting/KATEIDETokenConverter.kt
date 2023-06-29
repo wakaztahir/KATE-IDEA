@@ -6,6 +6,14 @@ import com.github.wakaztahir.kateidea.lexer.TokenConverter
 
 object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
 
+    override fun convert(token: KATETokens.SetVar): KATEIDEToken {
+        return KATEIDETokens.SetVar
+    }
+
+    override fun convert(token: KATEToken.Text): KATEIDEToken {
+        return KATEIDETokens.Text
+    }
+
     override fun convert(token: KATEToken.StringEscape): KATEIDEToken {
         return if (token.isValid) {
             KATEIDETokens.ValidStringEscape

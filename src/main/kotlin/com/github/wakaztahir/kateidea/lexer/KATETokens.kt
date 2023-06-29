@@ -22,6 +22,12 @@ object KATETokens {
         }
     }
 
+    object SetVar : KATEToken.String("set_var") {
+        override fun <T> convert(converter: TokenConverter<T>): T {
+            return converter.convert(this)
+        }
+    }
+
     object Function : KATEToken.String("function") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)

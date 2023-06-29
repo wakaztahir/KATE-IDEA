@@ -45,22 +45,29 @@ fun SourceStream.lexAsBadCharacters(
     }
 }
 
+fun SourceStream.directiveOffsetAtPosition(
+    isDefaultNoRaw: Boolean,
+    offset: Int,
+    directive: KATEToken.String
+): Int? {
+    val startOffset = if (isAtCurrentPosition(offset = offset, KATETokens.At.value)) 1 else {
+        if (isDefaultNoRaw) return null else 0
+    }
+    return if (isAtCurrentPositionText(offset = offset + startOffset, directive.value)) startOffset else null
+}
+
 fun SourceStream.directiveRangeAtPosition(
     isDefaultNoRaw: Boolean,
     offset: Int,
     directive: KATEToken.String,
     onIncrement: (() -> Unit)?
 ): TokenRange? {
-    val startOffset = if (isAtCurrentPosition(offset = offset, KATETokens.At.value)) 1 else {
-        if (isDefaultNoRaw) return null else 0
-    }
-    if (isAtCurrentPositionText(offset = offset + startOffset, directive.value)) {
-        return range(
+    return directiveOffsetAtPosition(isDefaultNoRaw, offset, directive)?.let { startOffset ->
+        range(
             offset = offset,
             lengthOffset = startOffset,
             token = directive,
             onIncrement = onIncrement
         )
     }
-    return null
 }

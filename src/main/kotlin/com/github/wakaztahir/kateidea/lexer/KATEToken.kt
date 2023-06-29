@@ -110,5 +110,14 @@ sealed interface KATEToken {
         }
     }
 
+    class Text(val value : kotlin.String) : KATEToken {
+        override val length: Int
+            get() = value.length
+
+        override fun <T> convert(converter: TokenConverter<T>): T {
+            return converter.convert(this)
+        }
+    }
+
 
 }

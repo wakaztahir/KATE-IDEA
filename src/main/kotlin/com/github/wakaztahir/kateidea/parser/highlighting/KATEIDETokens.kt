@@ -22,6 +22,11 @@ object KATEIDETokens {
             get() = HighlightingAttributeKeys.Keyword
     }
 
+    object SetVar : KATEIDEToken("SetVar") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
+    }
+
     object Function : KATEIDEToken("Function") {
         override val highlightingAttributeKeys: HighlightingAttributeKeys
             get() = HighlightingAttributeKeys.Keyword
@@ -75,6 +80,11 @@ object KATEIDETokens {
     }
 
     // General
+
+    object Text : KATEIDEToken("Text") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Text
+    }
 
     object BadCharacter : KATEIDEToken("BadCharacter") {
         override val highlightingAttributeKeys: HighlightingAttributeKeys
