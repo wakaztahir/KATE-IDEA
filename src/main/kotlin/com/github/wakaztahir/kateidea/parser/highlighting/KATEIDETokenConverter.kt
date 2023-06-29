@@ -6,6 +6,10 @@ import com.github.wakaztahir.kateidea.lexer.TokenConverter
 
 object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
 
+    override fun convert(token: KATETokens.Comma): KATEIDEToken {
+        return KATEIDETokens.Comma
+    }
+
     override fun convert(token: KATETokens.Write): KATEIDEToken {
         return KATEIDETokens.Write
     }

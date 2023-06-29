@@ -42,6 +42,12 @@ object KATETokens {
 
     // General
 
+    object Comma : KATEToken.Char(','){
+        override fun <T> convert(converter: TokenConverter<T>): T {
+            return converter.convert(this)
+        }
+    }
+
     object SingleEqual : KATEToken.Char('=') {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
@@ -120,7 +126,7 @@ object KATETokens {
 
     // Placeholder
 
-    object PlaceholderUse : KATEToken.String("placeholder_use") {
+    object PlaceholderUse : KATEToken.String("use_placeholder") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
