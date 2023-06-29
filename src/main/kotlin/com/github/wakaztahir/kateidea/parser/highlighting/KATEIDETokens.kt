@@ -27,6 +27,11 @@ object KATEIDETokens {
             get() = HighlightingAttributeKeys.Keyword
     }
 
+    object Write : KATEIDEToken("Write") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
+    }
+
     object Function : KATEIDEToken("Function") {
         override val highlightingAttributeKeys: HighlightingAttributeKeys
             get() = HighlightingAttributeKeys.Keyword
