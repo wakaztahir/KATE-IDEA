@@ -7,59 +7,63 @@ import com.github.wakaztahir.kateidea.lexer.TokenConverter
 object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
 
     override fun convert(token: KATEToken.StringEscape): KATEIDEToken {
-        return KATEIDEToken.Encapsulated(token)
+        return if (token.isValid) {
+            KATEIDETokens.ValidStringEscape
+        } else {
+            KATEIDETokens.InvalidStringEscape
+        }
     }
 
     override fun convert(token: KATEToken.StringValue): KATEIDEToken {
-        return KATEIDEToken.Encapsulated(token)
+        return KATEIDETokens.StringValue
     }
 
     override fun convert(token: KATEToken.IntValue): KATEIDEToken {
-        return KATEIDEToken.Encapsulated(token)
+        return KATEIDETokens.IntValue
     }
 
     override fun convert(token: KATEToken.DoubleValue): KATEIDEToken {
-        return KATEIDEToken.Encapsulated(token)
+        return KATEIDETokens.DoubleValue
     }
 
     override fun convert(token: KATEToken.LongValue): KATEIDEToken {
-        return KATEIDEToken.Encapsulated(token)
+        return KATEIDETokens.LongValue
     }
 
     override fun convert(token: KATEToken.CharValue): KATEIDEToken {
-        return KATEIDEToken.Encapsulated(token)
+        return KATEIDETokens.CharValue
     }
 
     override fun convert(token: KATEToken.BooleanValue): KATEIDEToken {
-        return KATEIDEToken.Encapsulated(token)
+        return KATEIDETokens.BooleanValue
     }
 
     override fun convert(token: KATEToken.Identifier): KATEIDEToken {
-        return KATEIDEToken.Encapsulated(token)
+        return KATEIDETokens.Identifier
     }
 
     override fun convert(token: KATEToken.BadCharacter): KATEIDEToken {
-        return KATEIDEToken.Encapsulated(token)
+        return KATEIDETokens.BadCharacter
     }
 
     override fun convert(token: KATEToken.Whitespace): KATEIDEToken {
-        return KATEIDEToken.Encapsulated(token)
+        return KATEIDETokens.Whitespace
     }
 
     override fun convert(token: KATEToken.ArithmeticOperator): KATEIDEToken {
-        return KATEIDEToken.Encapsulated(token)
+        return KATEIDETokens.ArithmeticOperator
     }
 
     override fun convert(token: KATEToken.OutputString): KATEIDEToken {
-        return KATEIDEToken.Encapsulated(token)
+        return KATEIDETokens.OutputString
     }
 
     override fun convert(token: KATEToken.CommentString): KATEIDEToken {
-        return KATEIDEToken.Encapsulated(token)
+        return KATEIDETokens.CommentString
     }
 
     override fun convert(token: KATEToken.ErrorToken): KATEIDEToken {
-        return KATEIDEToken.Encapsulated(token)
+        return KATEIDETokens.ErrorToken
     }
 
     override fun convert(token: KATETokens.If): KATEIDEToken {
@@ -81,26 +85,6 @@ object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
     override fun convert(token: KATETokens.SingleEqual): KATEIDEToken {
         return KATEIDETokens.SingleEqual
     }
-
-//    override fun convert(token: KATETokens.Plus): KATEIDEToken {
-//        return KATEIDETokens.Plus
-//    }
-//
-//    override fun convert(token: KATETokens.Minus): KATEIDEToken {
-//        return KATEIDETokens.Minus
-//    }
-//
-//    override fun convert(token: KATETokens.Multiply): KATEIDEToken {
-//        return KATEIDETokens.Multiply
-//    }
-//
-//    override fun convert(token: KATETokens.Divide): KATEIDEToken {
-//        return KATEIDETokens.Divide
-//    }
-//
-//    override fun convert(token: KATETokens.Modulus): KATEIDEToken {
-//        return KATEIDETokens.Modulus
-//    }
 
     override fun convert(token: KATETokens.LeftParenthesis): KATEIDEToken {
         return KATEIDETokens.LeftParenthesis

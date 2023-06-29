@@ -13,14 +13,12 @@ import com.wakaztahir.kate.lexer.stream.SourceStream
 class StringValueLexer(private val stream: SourceStream) : Lexer, CompositeLexState() {
 
     private var isLexingString by state(false)
-    private var isLexingEscape by state(false)
 
     private fun resetState() {
         isLexingString = false
-        isLexingEscape = false
     }
 
-    fun isLexing(): Boolean = isLexingString || isLexingEscape
+    fun isLexing(): Boolean = isLexingString
 
     private fun lexStringUntilEndOrEscapeSeq(offset: Int, start: Int = offset, lengthOffset: Int = 0): TokenRange? {
         val text = stream.readTextAheadUntilLambdaOrStreamEnds(offset) { currChar, _ ->
@@ -35,7 +33,6 @@ class StringValueLexer(private val stream: SourceStream) : Lexer, CompositeLexSt
                 '\\' -> {
                     {
                         isLexingString = true
-                        isLexingEscape = true
                     }
                 }
 
@@ -56,9 +53,7 @@ class StringValueLexer(private val stream: SourceStream) : Lexer, CompositeLexSt
                     start = stream.pointer + offset,
                     token = KATEToken.StringEscape(realValue ?: escapeChar, isValid = realValue != null),
                     length = 2,
-                    onIncrement = {
-                        isLexingEscape = false
-                    }
+                    onIncrement = null
                 )
             }
         } else {
@@ -68,11 +63,8 @@ class StringValueLexer(private val stream: SourceStream) : Lexer, CompositeLexSt
 
     override fun lexTokenAtPosition(offset: Int): TokenRange? {
         if (isLexingString) {
-            return if (isLexingEscape) {
-                lexEscapeToken(offset = offset)
-            } else {
-                lexStringUntilEndOrEscapeSeq(offset = offset)
-            }
+            lexEscapeToken(offset = offset)?.let { return it }
+            lexStringUntilEndOrEscapeSeq(offset = offset)?.let { return it }
         } else if (stream.isAtCurrentPosition(offset = offset, '"')) {
             return lexStringUntilEndOrEscapeSeq(offset = offset + 1, start = offset, lengthOffset = 1)
         }

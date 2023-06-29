@@ -16,7 +16,7 @@ class KATESyntaxHighlighter(val lexer: Lexer) : SyntaxHighlighterBase() {
 
     override fun getTokenHighlights(tokenType: IElementType): Array<out TextAttributesKey?> {
         if (tokenType is KATEIDEToken) {
-            return tokenType.kateToken.convert(TokenHighlighterConverter).colorKeys
+            return tokenType.highlightingAttributeKeys.colorKeys
         }
         return emptyKeys
     }

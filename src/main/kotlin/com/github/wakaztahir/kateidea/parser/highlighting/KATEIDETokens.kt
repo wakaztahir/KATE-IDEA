@@ -1,146 +1,227 @@
 package com.github.wakaztahir.kateidea.parser.highlighting
 
 import com.github.wakaztahir.kateidea.lexer.KATEToken
-import com.github.wakaztahir.kateidea.lexer.KATETokens
+
 
 object KATEIDETokens {
 
     // Language
 
-    val If = object : KATEIDEToken("if") {
-        override val kateToken: KATEToken get() = KATETokens.If
+    object If : KATEIDEToken("if") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
-    val For = object : KATEIDEToken("for") {
-        override val kateToken: KATEToken get() = KATETokens.For
+    object For : KATEIDEToken("for") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
-    val Var = object : KATEIDEToken("var") {
-        override val kateToken: KATEToken get() = KATETokens.Var
+    object Var : KATEIDEToken("var") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
-    val Function = object : KATEIDEToken("function") {
-        override val kateToken: KATEToken get() = KATETokens.Function
+    object Function : KATEIDEToken("function") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
-    // Operators
+    object ValidStringEscape : KATEIDEToken("string_escape") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.ValidStringEscape
+    }
 
-//    val Plus = object : KATEIDEToken('+') {
-//        override val kateToken : KATEToken get() = KATETokens.Plus
-//    }
-//
-//    val Minus = object : KATEIDEToken('-') {
-//        override val kateToken : KATEToken get() = KATETokens.Minus
-//    }
-//
-//    val Multiply = object : KATEIDEToken('*') {
-//        override val kateToken : KATEToken get() = KATETokens.Multiply
-//    }
-//
-//    val Divide = object : KATEIDEToken('/') {
-//        override val kateToken : KATEToken get() = KATETokens.Divide
-//    }
-//
-//    val Modulus = object : KATEIDEToken('%') {
-//        override val kateToken : KATEToken get() = KATETokens.Modulus
-//    }
+    object InvalidStringEscape : KATEIDEToken("string_escape") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.InvalidStringEscape
+    }
+
+    // Values
+
+    object StringValue : KATEIDEToken("StringValue") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.String
+    }
+
+    object IntValue : KATEIDEToken("IntValue") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Number
+    }
+
+    object DoubleValue : KATEIDEToken("DoubleValue") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Number
+    }
+
+    object LongValue : KATEIDEToken("LongValue") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Number
+    }
+
+    object CharValue : KATEIDEToken("CharValue") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.String
+    }
+
+    object BooleanValue : KATEIDEToken("BooleanValue") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
+    }
+
+    object Identifier : KATEIDEToken("Identifier") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Identifier
+    }
 
     // General
 
-    val SingleEqual = object : KATEIDEToken("=") {
-        override val kateToken: KATEToken get() = KATETokens.SingleEqual
+    object BadCharacter : KATEIDEToken("BadCharacter") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.BadCharacter
     }
 
-    val LeftParenthesis = object : KATEIDEToken('(') {
-        override val kateToken: KATEToken get() = KATETokens.LeftParenthesis
+    object Whitespace : KATEIDEToken("Whitespace") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.None
     }
 
-    val RightParenthesis = object : KATEIDEToken(')') {
-        override val kateToken: KATEToken get() = KATETokens.RightParenthesis
+    object ArithmeticOperator : KATEIDEToken("ArithmeticOperator") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.OperationSign
     }
 
-    val LeftBracket = object : KATEIDEToken('[') {
-        override val kateToken: KATEToken get() = KATETokens.LeftBracket
+    object OutputString : KATEIDEToken("OutputString") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.String
     }
 
-    val RightBracket = object : KATEIDEToken(']') {
-        override val kateToken: KATEToken get() = KATETokens.RightBracket
+    object CommentString : KATEIDEToken("CommentString") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.BlockComment
     }
 
-    val LeftBrace = object : KATEIDEToken('{') {
-        override val kateToken: KATEToken get() = KATETokens.LeftBrace
+    object ErrorToken : KATEIDEToken("ErrorToken") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.BadCharacter
     }
 
-    val RightBrace = object : KATEIDEToken('}') {
-        override val kateToken: KATEToken get() = KATETokens.RightBrace
+    object SingleEqual : KATEIDEToken("=") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.OperationSign
     }
 
-    val At = object : KATEIDEToken('@') {
-        override val kateToken: KATEToken get() = KATETokens.At
+    object LeftParenthesis : KATEIDEToken('(') {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Parentheses
+    }
+
+    object RightParenthesis : KATEIDEToken(')') {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Parentheses
+    }
+
+    object LeftBracket : KATEIDEToken('[') {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Brackets
+    }
+
+    object RightBracket : KATEIDEToken(']') {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Brackets
+    }
+
+    object LeftBrace : KATEIDEToken('{') {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Braces
+    }
+
+    object RightBrace : KATEIDEToken('}') {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Braces
+    }
+
+    object At : KATEIDEToken('@') {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
     // Comment
 
-    val CommentStart = object : KATEIDEToken("<%--") {
-        override val kateToken: KATEToken get() = KATETokens.CommentStart
+    object CommentStart : KATEIDEToken("<%--") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.BlockComment
     }
 
-    val CommentEnd = object : KATEIDEToken("--%>") {
-        override val kateToken: KATEToken get() = KATETokens.CommentEnd
+    object CommentEnd : KATEIDEToken("--%>") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.BlockComment
     }
 
     // Embed
 
-    val Embed = object : KATEIDEToken("embed") {
-        override val kateToken: KATEToken get() = KATETokens.Embed
+    object Embed : KATEIDEToken("embed") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
-    val EmbedOnce = object : KATEIDEToken("embed_once") {
-        override val kateToken: KATEToken get() = KATETokens.EmbedOnce
+    object EmbedOnce : KATEIDEToken("embed_once") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
     // Placeholder
 
-    val PlaceholderUse = object : KATEIDEToken("placeholder_use") {
-        override val kateToken: KATEToken get() = KATETokens.PlaceholderUse
+    object PlaceholderUse : KATEIDEToken("placeholder_use") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
-    val Placeholder = object : KATEIDEToken("placeholder") {
-        override val kateToken: KATEToken get() = KATETokens.Placeholder
+    object Placeholder : KATEIDEToken("placeholder") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
-    val DefinePlaceholder = object : KATEIDEToken("define_placeholder") {
-        override val kateToken: KATEToken get() = KATETokens.DefinePlaceholder
+    object DefinePlaceholder : KATEIDEToken("define_placeholder") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
-    val EndDefinePlaceholder = object : KATEIDEToken("end_define_placeholder") {
-        override val kateToken: KATEToken get() = KATETokens.EndDefinePlaceholder
+    object EndDefinePlaceholder : KATEIDEToken("end_define_placeholder") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
     // Modes
 
-    val DefaultNoRaw = object : KATEIDEToken("default_no_raw") {
-        override val kateToken: KATEToken get() = KATETokens.DefaultNoRaw
+    object DefaultNoRaw : KATEIDEToken("default_no_raw") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
-    val EndDefaultNoRaw = object : KATEIDEToken("end_default_no_raw") {
-        override val kateToken: KATEToken get() = KATETokens.EndDefaultNoRaw
+    object EndDefaultNoRaw : KATEIDEToken("end_default_no_raw") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
-    val PartialRaw = object : KATEIDEToken("partial_raw") {
-        override val kateToken: KATEToken get() = KATETokens.PartialRaw
+    object PartialRaw : KATEIDEToken("partial_raw") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
-    val EndPartialRaw = object : KATEIDEToken("end_partial_raw") {
-        override val kateToken: KATEToken get() = KATETokens.EndPartialRaw
+    object EndPartialRaw : KATEIDEToken("end_partial_raw") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
-    val Raw = object : KATEIDEToken("raw") {
-        override val kateToken: KATEToken get() = KATETokens.Raw
+    object Raw : KATEIDEToken("raw") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
-    val EndRaw = object : KATEIDEToken("endraw") {
-        override val kateToken: KATEToken get() = KATETokens.EndRaw
+    object EndRaw : KATEIDEToken("endraw") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
     }
 
 
