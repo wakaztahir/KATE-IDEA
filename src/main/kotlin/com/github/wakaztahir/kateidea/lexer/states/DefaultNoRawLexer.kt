@@ -16,10 +16,10 @@ class DefaultNoRawLexer(
             EmbedLexer(source, isDefaultNoRaw = true),
             RawLexer(source, isDefaultNoRaw = true),
             RuntimeWriteLexer(source, isDefaultNoRaw = true),
-            PlaceholderUseLexer(source,isDefaultNoRaw = true),
-            PlaceholderInvocationLexer(source,isDefaultNoRaw = true),
+            PlaceholderUseLexer(source, isDefaultNoRaw = true),
+            PlaceholderInvocationLexer(source, isDefaultNoRaw = true),
             VariableDeclarationLexer(source, isDefaultNoRaw = true),
-            VariableAssignmentLexer(source, isDefaultNoRaw = true)
+            VariableAssignmentLexer(source, isDefaultNoRaw = true),
         )
     )
 

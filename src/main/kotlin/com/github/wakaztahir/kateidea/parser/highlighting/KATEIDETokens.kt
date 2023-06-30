@@ -91,6 +91,11 @@ object KATEIDETokens {
             get() = HighlightingAttributeKeys.Text
     }
 
+    object Dot : KATEIDEToken("Dot"){
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Dot
+    }
+
     object Comma : KATEIDEToken("Comma") {
         override val highlightingAttributeKeys: HighlightingAttributeKeys
             get() = HighlightingAttributeKeys.Comma

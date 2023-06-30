@@ -7,7 +7,7 @@ data class TokenRange(
     val start: Int,
     val token: KATEToken,
     val length: Int,
-    val onIncrement: (() -> Unit)?,
+    private val onIncrement: (() -> Unit)?,
 ) {
 
     val end get() = start + length
@@ -15,6 +15,17 @@ data class TokenRange(
     fun increment(source: SourceStream) {
         source.incrementPointer(length)
         onIncrement?.invoke()
+    }
+
+    fun alsoOnIncrement(block: () -> Unit): TokenRange {
+        return copy(
+            onIncrement = if (onIncrement == null) block else {
+                {
+                    onIncrement.invoke()
+                    block()
+                }
+            }
+        )
     }
 
 }

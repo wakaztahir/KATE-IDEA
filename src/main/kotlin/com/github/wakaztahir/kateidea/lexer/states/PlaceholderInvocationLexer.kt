@@ -109,9 +109,8 @@ class PlaceholderInvocationLexer(private val source: SourceStream, private val i
                     }
                 }
                 valueLexer.lexTokenAtPosition(offset)?.let {
-                    return it.copy(
-                        onIncrement = {
-                            it.onIncrement?.invoke()
+                    return it.alsoOnIncrement(
+                        block = {
                             if (!valueLexer.isLexing()) {
                                 state = State.RightParenthesis
                             }

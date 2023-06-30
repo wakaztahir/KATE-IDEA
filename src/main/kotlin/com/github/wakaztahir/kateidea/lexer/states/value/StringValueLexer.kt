@@ -45,15 +45,17 @@ class StringValueLexer(private val stream: SourceStream) : Lexer, CompositeLexSt
         )
     }
 
-    private fun lexEscapeToken(offset: Int): TokenRange? {
+    private fun lexEscapeToken(offset: Int, start: Int = offset, lengthOffset: Int = 0): TokenRange? {
         return if (stream.lookAhead(offset) == '\\') {
             stream.lookAhead(offset + 1)?.let { escapeChar ->
                 val realValue = CharValueLexer.transformCharAfterBackslash(escapeChar)
                 TokenRange(
-                    start = stream.pointer + offset,
+                    start = stream.pointer + start,
                     token = KATEToken.StringEscape(realValue ?: escapeChar, isValid = realValue != null),
-                    length = 2,
-                    onIncrement = null
+                    length = 2 + lengthOffset,
+                    onIncrement = if (!isLexingString) {
+                        { isLexingString = true }
+                    } else null
                 )
             }
         } else {
@@ -66,7 +68,9 @@ class StringValueLexer(private val stream: SourceStream) : Lexer, CompositeLexSt
             lexEscapeToken(offset = offset)?.let { return it }
             lexStringUntilEndOrEscapeSeq(offset = offset)?.let { return it }
         } else if (stream.isAtCurrentPosition(offset = offset, '"')) {
-            return lexStringUntilEndOrEscapeSeq(offset = offset + 1, start = offset, lengthOffset = 1)
+            val start = offset + 1
+            lexEscapeToken(offset = start, start = offset,lengthOffset = 1)?.let { return it }
+            lexStringUntilEndOrEscapeSeq(offset = start, start = offset, lengthOffset = 1)?.let { return it }
         }
         return null
     }

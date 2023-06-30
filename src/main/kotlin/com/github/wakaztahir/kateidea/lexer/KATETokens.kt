@@ -42,7 +42,13 @@ object KATETokens {
 
     // General
 
-    object Comma : KATEToken.Char(','){
+    object Dot : KATEToken.Char('.') {
+        override fun <T> convert(converter: TokenConverter<T>): T {
+            return converter.convert(this)
+        }
+    }
+
+    object Comma : KATEToken.Char(',') {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }

@@ -79,9 +79,8 @@ class VariableAssignmentLexer(
             State.Value -> {
                 source.lexWhitespaces(offset)?.let { return it }
                 valueLexer.lexTokenAtPosition(offset)?.let {
-                    return it.copy(
-                        onIncrement = {
-                            it.onIncrement?.invoke()
+                    return it.alsoOnIncrement(
+                        block = {
                             if (!valueLexer.isLexing()) resetState()
                         }
                     )

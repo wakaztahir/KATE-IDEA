@@ -2,6 +2,8 @@ package com.github.wakaztahir.kateidea.lexer
 
 interface TokenConverter<T> {
 
+    fun convert(token : KATETokens.Dot) : T
+
     fun convert(token : KATETokens.Comma) : T
 
     fun convert(token : KATETokens.Write) : T

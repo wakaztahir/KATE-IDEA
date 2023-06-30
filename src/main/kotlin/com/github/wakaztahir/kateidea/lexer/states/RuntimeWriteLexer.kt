@@ -45,9 +45,8 @@ class RuntimeWriteLexer(private val source: SourceStream, private val isDefaultN
 
             State.Value -> {
                 valueLexer.lexTokenAtPosition(offset)?.let {
-                    return it.copy(
-                        onIncrement = {
-                            it.onIncrement?.invoke()
+                    return it.alsoOnIncrement(
+                        block = {
                             if (!valueLexer.isLexing()) {
                                 state = State.ClosingParenthesis
                             }
