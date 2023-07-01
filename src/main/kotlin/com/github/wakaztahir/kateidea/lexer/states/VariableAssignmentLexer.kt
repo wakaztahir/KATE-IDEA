@@ -5,6 +5,7 @@ import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
 import com.github.wakaztahir.kateidea.lexer.state.getValue
 import com.github.wakaztahir.kateidea.lexer.state.setValue
 import com.github.wakaztahir.kateidea.lexer.state.state
+import com.github.wakaztahir.kateidea.lexer.states.value.DefaultExpressionValueLexer
 import com.github.wakaztahir.kateidea.lexer.states.value.PrimitiveValueLexer
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
@@ -22,7 +23,7 @@ class VariableAssignmentLexer(
     }
 
     private var state by state(State.None)
-    private val valueLexer by lazyState { PrimitiveValueLexer(source) }
+    private val valueLexer by lazyState { DefaultExpressionValueLexer(source,isDefaultNoRaw) }
 
     private fun resetState() {
         state = State.None

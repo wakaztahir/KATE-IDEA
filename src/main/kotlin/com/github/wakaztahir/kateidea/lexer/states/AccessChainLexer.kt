@@ -15,8 +15,7 @@ class AccessChainLexer(
 
     enum class State {
         None,
-        DPB,
-        DPBOrIdentifier, // DPB = Dot or Parenthesis or Brackets
+        DPB, // DPB = Dot or Parenthesis or Brackets
         MustIdentifier,
         ParameterOrEndingParenthesis,
         Parameter,
@@ -61,6 +60,15 @@ class AccessChainLexer(
         }
     }
 
+    private fun dpbStateIncrementerIfExistsAt(offset: Int): () -> Unit {
+        val isDPBNext = source.lookAhead(offset)?.isDPB() == true
+        return if (isDPBNext) {
+            { state = State.DPB }
+        } else {
+            { state = State.None }
+        }
+    }
+
     private fun lexIdentifier(offset: Int): TokenRange? {
         if (source.lookAhead(offset)?.isLetter() == true) {
             val text =
@@ -69,9 +77,7 @@ class AccessChainLexer(
                 source.range(
                     offset = offset,
                     token = KATEToken.Identifier(it),
-                    onIncrement = {
-                        state = State.DPBOrIdentifier
-                    }
+                    onIncrement = dpbStateIncrementerIfExistsAt(offset + it.length)
                 )
             }
         }
@@ -88,22 +94,13 @@ class AccessChainLexer(
                 return lexDPB(offset) ?: source.lexAsBadCharacters(offset)
             }
 
-            State.DPBOrIdentifier -> {
-                return lexDPB(offset) ?: lexIdentifier(offset) ?: source.lexAsBadCharacters(offset)
-            }
-
             State.MustIdentifier -> {
                 return lexIdentifier(offset) ?: source.lexAsBadCharacters(offset)
             }
 
             State.ParameterOrEndingParenthesis -> {
                 if (source.lookAhead(offset) == ')') {
-                    val isDPBNext = source.lookAhead(offset + 1)?.isDPB() == true
-                    return source.range(offset, KATETokens.RightParenthesis, onIncrement = if (isDPBNext) {
-                        { state = State.DPB }
-                    } else {
-                        { state = State.None }
-                    })
+                    return source.range(offset, KATETokens.RightParenthesis, onIncrement = dpbStateIncrementerIfExistsAt(offset + 1))
                 }
                 valueLexer.lexTokenAtPosition(offset)?.let {
                     return it.alsoOnIncrement {
@@ -117,12 +114,7 @@ class AccessChainLexer(
                 source.lookAhead(offset)?.let {
                     when (it) {
                         ')' -> {
-                            val isDPBNext = source.lookAhead(offset + 1)?.isDPB() == true
-                            return source.range(offset, KATETokens.RightParenthesis, onIncrement = if (isDPBNext) {
-                                { state = State.DPB }
-                            } else {
-                                { state = State.None }
-                            })
+                            return source.range(offset, KATETokens.RightParenthesis, onIncrement = dpbStateIncrementerIfExistsAt(offset + 1))
                         }
 
                         ',' -> return source.range(offset, KATETokens.Comma) {
@@ -148,12 +140,7 @@ class AccessChainLexer(
 
             State.EndingBracket -> {
                 return if (source.lookAhead(offset) == ']') {
-                    val isDPBNext = source.lookAhead(offset + 1)?.isDPB() == true
-                    source.range(offset, KATETokens.RightBracket, onIncrement = if (isDPBNext) {
-                        { state = State.DPB }
-                    } else {
-                        { state = State.None }
-                    })
+                    source.range(offset, KATETokens.RightBracket, onIncrement = dpbStateIncrementerIfExistsAt(offset + 1))
                 } else {
                     source.lexAsBadCharacters(offset)
                 }
