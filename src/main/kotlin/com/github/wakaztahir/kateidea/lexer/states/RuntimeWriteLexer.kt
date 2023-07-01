@@ -5,12 +5,15 @@ import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
 import com.github.wakaztahir.kateidea.lexer.state.getValue
 import com.github.wakaztahir.kateidea.lexer.state.setValue
 import com.github.wakaztahir.kateidea.lexer.state.state
+import com.github.wakaztahir.kateidea.lexer.states.value.DefaultExpressionValueLexer
 import com.github.wakaztahir.kateidea.lexer.states.value.PrimitiveValueLexer
 import com.wakaztahir.kate.lexer.stream.SourceStream
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 
-class RuntimeWriteLexer(private val source: SourceStream, private val isDefaultNoRaw: Boolean) : Lexer,
-    CompositeLexState() {
+class RuntimeWriteLexer(
+    private val source: SourceStream,
+    private val isDefaultNoRaw: Boolean
+) : Lexer, CompositeLexState() {
 
     enum class State {
         None,
@@ -20,7 +23,7 @@ class RuntimeWriteLexer(private val source: SourceStream, private val isDefaultN
     }
 
     private var state by state(State.None)
-    private val valueLexer by lazyState { PrimitiveValueLexer(source) }
+    private val valueLexer by lazyState { DefaultExpressionValueLexer(source, isDefaultNoRaw) }
 
     private fun resetState() {
         state = State.None

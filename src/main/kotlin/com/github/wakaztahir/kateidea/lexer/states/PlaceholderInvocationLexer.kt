@@ -5,11 +5,14 @@ import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
 import com.github.wakaztahir.kateidea.lexer.state.getValue
 import com.github.wakaztahir.kateidea.lexer.state.setValue
 import com.github.wakaztahir.kateidea.lexer.state.state
+import com.github.wakaztahir.kateidea.lexer.states.value.DefaultExpressionValueLexer
 import com.github.wakaztahir.kateidea.lexer.states.value.PrimitiveValueLexer
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
-class PlaceholderInvocationLexer(private val source: SourceStream, private val isDefaultNoRaw: Boolean) : Lexer,
-    CompositeLexState() {
+class PlaceholderInvocationLexer(
+    private val source: SourceStream,
+    private val isDefaultNoRaw: Boolean
+) : Lexer, CompositeLexState() {
 
     enum class State {
         None,
@@ -22,7 +25,7 @@ class PlaceholderInvocationLexer(private val source: SourceStream, private val i
     }
 
     private var state by state(State.None)
-    private val valueLexer by lazyState { PrimitiveValueLexer(source) }
+    private val valueLexer by lazyState { DefaultExpressionValueLexer(source, isDefaultNoRaw) }
 
     private fun resetState() {
         state = State.None
@@ -88,7 +91,8 @@ class PlaceholderInvocationLexer(private val source: SourceStream, private val i
                             state = State.None
                         }
                     }
-                    val text = source.readTextAheadUntilLambdaOrStreamEnds(offset){ currChar, offset -> currChar == ',' || currChar == ')' }
+                    val text =
+                        source.readTextAheadUntilLambdaOrStreamEnds(offset) { currChar, offset -> currChar == ',' || currChar == ')' }
                     return text?.let {
                         source.range(offset = offset, KATEToken.Identifier(it)) {
                             state = State.Value
@@ -98,16 +102,6 @@ class PlaceholderInvocationLexer(private val source: SourceStream, private val i
             }
 
             State.Value -> {
-                if (source.lookAhead(offset) == ',') {
-                    return source.range(offset = offset, KATETokens.Comma) {
-                        state = State.Value
-                    }
-                }
-                if (source.lookAhead(offset) == ')') {
-                    return source.range(offset = offset, KATETokens.RightParenthesis) {
-                        state = State.None
-                    }
-                }
                 valueLexer.lexTokenAtPosition(offset)?.let {
                     return it.alsoOnIncrement(
                         block = {
@@ -116,6 +110,14 @@ class PlaceholderInvocationLexer(private val source: SourceStream, private val i
                             }
                         }
                     )
+                }
+                if (source.lookAhead(offset) == ',') {
+                    return source.range(offset = offset, KATETokens.Comma, null)
+                }
+                if (source.lookAhead(offset) == ')') {
+                    return source.range(offset = offset, KATETokens.RightParenthesis) {
+                        state = State.None
+                    }
                 }
                 return source.lexAsBadCharacters(offset = offset, null)
             }
