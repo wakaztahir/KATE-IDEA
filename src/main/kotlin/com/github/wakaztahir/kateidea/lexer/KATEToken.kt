@@ -52,13 +52,13 @@ sealed interface KATEToken {
         }
     }
 
-    class LongValue(value: Long, override val length: Int) : KATEToken {
+    class LongValue(val value: Long, override val length: Int) : KATEToken {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    class ArithmeticOperator(val operation: kotlin.Char) : KATEToken {
+    class ArithmeticOperator(val value: kotlin.Char) : KATEToken {
         override val length: Int = 1
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)

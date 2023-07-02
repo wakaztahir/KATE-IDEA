@@ -1,10 +1,7 @@
 package com.github.wakaztahir.kateidea.lexer.states
 
 import com.github.wakaztahir.kateidea.lexer.*
-import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
-import com.github.wakaztahir.kateidea.lexer.state.getValue
-import com.github.wakaztahir.kateidea.lexer.state.setValue
-import com.github.wakaztahir.kateidea.lexer.state.state
+import com.github.wakaztahir.kateidea.lexer.state.*
 import com.github.wakaztahir.kateidea.lexer.states.value.PrimitiveValueLexer
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
@@ -24,12 +21,20 @@ class AccessChainLexer(
         SingleParameter
     }
 
-    private var state by state(State.None)
-    private val valueLexer by lazyState { PrimitiveValueLexer(source) }
+    private val enumStackState = state(enumStackOf(State.None))
+    private var state : State
+        get() = enumStackState.peak()
+        set(value) {
+            enumStackState.pop()
+            enumStackState.push(value)
+        }
+
+    private val valueLexerState = lazyState { PrimitiveValueLexer(source) }
+    private val valueLexer get() = valueLexerState.state
 
     private fun Char.isDPB() = this == '(' || this == '[' || this == '.'
 
-    fun isLexing(): Boolean = state != State.None || valueLexer.isLexing()
+    fun isLexing(): Boolean = state != State.None || (valueLexerState.isInitialized() && valueLexer.isLexing())
 
     private fun resetState() {
         state = State.None
@@ -100,7 +105,11 @@ class AccessChainLexer(
 
             State.ParameterOrEndingParenthesis -> {
                 if (source.lookAhead(offset) == ')') {
-                    return source.range(offset, KATETokens.RightParenthesis, onIncrement = dpbStateIncrementerIfExistsAt(offset + 1))
+                    return source.range(
+                        offset,
+                        KATETokens.RightParenthesis,
+                        onIncrement = dpbStateIncrementerIfExistsAt(offset + 1)
+                    )
                 }
                 valueLexer.lexTokenAtPosition(offset)?.let {
                     return it.alsoOnIncrement {
@@ -114,7 +123,11 @@ class AccessChainLexer(
                 source.lookAhead(offset)?.let {
                     when (it) {
                         ')' -> {
-                            return source.range(offset, KATETokens.RightParenthesis, onIncrement = dpbStateIncrementerIfExistsAt(offset + 1))
+                            return source.range(
+                                offset,
+                                KATETokens.RightParenthesis,
+                                onIncrement = dpbStateIncrementerIfExistsAt(offset + 1)
+                            )
                         }
 
                         ',' -> return source.range(offset, KATETokens.Comma) {
@@ -140,7 +153,11 @@ class AccessChainLexer(
 
             State.EndingBracket -> {
                 return if (source.lookAhead(offset) == ']') {
-                    source.range(offset, KATETokens.RightBracket, onIncrement = dpbStateIncrementerIfExistsAt(offset + 1))
+                    source.range(
+                        offset,
+                        KATETokens.RightBracket,
+                        onIncrement = dpbStateIncrementerIfExistsAt(offset + 1)
+                    )
                 } else {
                     source.lexAsBadCharacters(offset)
                 }

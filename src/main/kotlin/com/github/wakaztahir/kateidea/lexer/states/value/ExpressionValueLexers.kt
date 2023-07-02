@@ -14,39 +14,24 @@ class DefaultExpressionValueLexer(
     val isDefaultNoRaw: Boolean
 ) : Lexer, CompositeLexState() {
 
-    enum class State {
-        None,
-        ValueOnly
-    }
+    private val accessChainLexerState = lazyState { AccessChainLexer(source = source, isDefaultNoRaw = isDefaultNoRaw) }
+    private val valueLexerState = lazyState { PrimitiveValueLexer(source = source) }
 
-    private var state by state(State.None)
+    private val accessChainLexer get() = accessChainLexerState.state
+    private val valueLexer get() = valueLexerState.state
 
-    private val valueLexer by lazyState { PrimitiveValueLexer(source = source) }
-    private val accessChainLexer by lazyState { AccessChainLexer(source = source, isDefaultNoRaw = isDefaultNoRaw) }
-
-    fun isLexing() = accessChainLexer.isLexing() || valueLexer.isLexing()
+    fun isLexing() = (accessChainLexerState.isInitialized() && accessChainLexer.isLexing())
+            || (valueLexerState.isInitialized() && valueLexer.isLexing())
 
     override fun lexTokenAtPosition(offset: Int): TokenRange? {
-        when (state) {
-            State.None -> {
-                accessChainLexer.lexTokenAtPosition(offset)?.let {
-                    return it
-                }
-                if (!accessChainLexer.isLexing()) {
-                    valueLexer.lexTokenAtPosition(offset)?.let {
-                        return it.alsoOnIncrement {
-                            if (valueLexer.isLexing()) state = State.ValueOnly
-                        }
-                    }
-                }
+        if (!(valueLexerState.isInitialized() && valueLexer.isLexing())) {
+            accessChainLexer.lexTokenAtPosition(offset)?.let {
+                return it
             }
-
-            State.ValueOnly -> {
-                valueLexer.lexTokenAtPosition(offset)?.let {
-                    return it.alsoOnIncrement {
-                        if (!valueLexer.isLexing()) state = State.None
-                    }
-                }
+        }
+        if (!accessChainLexer.isLexing()) {
+            valueLexer.lexTokenAtPosition(offset)?.let {
+                return it
             }
         }
         return null
