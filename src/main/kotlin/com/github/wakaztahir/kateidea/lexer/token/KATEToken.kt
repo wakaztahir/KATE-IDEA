@@ -1,4 +1,6 @@
-package com.github.wakaztahir.kateidea.lexer
+package com.github.wakaztahir.kateidea.lexer.token
+
+import com.github.wakaztahir.kateidea.lexer.TokenConverter
 
 sealed interface KATEToken {
 
@@ -6,35 +8,7 @@ sealed interface KATEToken {
 
     fun <T> convert(converter: TokenConverter<T>): T
 
-    abstract class String(val value: kotlin.String) : KATEToken {
-        override val length: Int
-            get() = value.length
-    }
-
-    abstract class Char(val value: kotlin.Char) : KATEToken {
-        override val length: Int
-            get() = 1
-    }
-
-    class CharValue(value: kotlin.Char) : Char(value = value) {
-        override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convert(this)
-        }
-    }
-
-    class StringValue(value : kotlin.String) : String(value) {
-        override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convert(this)
-        }
-    }
-
-    class StringEscape(value : kotlin.Char,val isValid : kotlin.Boolean) : Char(value = value) {
-        override fun <T> convert(converter: TokenConverter<T>): T {
-            return converter.convert(this)
-        }
-    }
-
-    class BooleanValue(val value : Boolean, override val length: Int) : KATEToken {
+    class BooleanValue(val value: Boolean, override val length: Int) : KATEToken {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
@@ -58,7 +32,7 @@ sealed interface KATEToken {
         }
     }
 
-    class ArithmeticOperator(val value: kotlin.Char) : KATEToken {
+    class ArithmeticOperator(val value: Char) : KATEToken {
         override val length: Int = 1
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
@@ -77,43 +51,35 @@ sealed interface KATEToken {
         }
     }
 
-    class ErrorToken(val message: kotlin.String, override val length: Int) : KATEToken {
+    class ErrorToken(val message: String, override val length: Int) : KATEToken {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    class OutputString(val value: kotlin.String) : KATEToken {
-        override val length: Int
-            get() = value.length
-
+    class OutputString(val value: String) : KATEToken {
+        override val length: Int get() = value.length
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    class Identifier(val text: kotlin.String) : KATEToken {
-        override val length: Int
-            get() = text.length
-
+    class Identifier(val text: String) : KATEToken {
+        override val length: Int get() = text.length
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    class CommentString(val value: kotlin.String) : KATEToken {
-        override val length: Int
-            get() = value.length
-
+    class CommentString(val value: String) : KATEToken {
+        override val length: Int get() = value.length
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    class Text(val value : kotlin.String) : KATEToken {
-        override val length: Int
-            get() = value.length
-
+    class Text(val value: String) : KATEToken {
+        override val length: Int get() = value.length
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }

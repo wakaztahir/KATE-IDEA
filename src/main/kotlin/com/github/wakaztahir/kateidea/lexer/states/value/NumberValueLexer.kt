@@ -1,16 +1,12 @@
 package com.github.wakaztahir.kateidea.lexer.states.value
 
-import com.github.wakaztahir.kateidea.lexer.KATEToken
+import com.github.wakaztahir.kateidea.lexer.token.KATEToken
 import com.github.wakaztahir.kateidea.lexer.isAtCurrentPosition
 import com.github.wakaztahir.kateidea.lexer.range
 import com.github.wakaztahir.kateidea.lexer.readTextAheadUntilLambdaOrStreamEnds
 import com.github.wakaztahir.kateidea.lexer.states.TokenRange
 import com.github.wakaztahir.kateidea.lexer.states.ValueLexer
-import com.wakaztahir.kate.lexer.model.DynamicTokenLexer
 import com.wakaztahir.kate.lexer.stream.SourceStream
-import com.wakaztahir.kate.lexer.stream.increment
-import com.wakaztahir.kate.lexer.tokens.StaticTokens
-import com.wakaztahir.kate.lexer.tokens.dynamic.PrimitiveToken
 
 object NumberValueLexer : ValueLexer {
 

@@ -1,30 +1,29 @@
 package com.github.wakaztahir.kateidea.value.primitive
 
-import com.github.wakaztahir.kateidea.assertToken
-import com.github.wakaztahir.kateidea.lexCode
-import com.github.wakaztahir.kateidea.lexer.KATEToken
-import com.github.wakaztahir.kateidea.lexer.KATETokens
+import com.github.wakaztahir.kateidea.lexer.token.KATEToken
+import com.github.wakaztahir.kateidea.lexer.token.TypedToken
+import com.github.wakaztahir.kateidea.testVariableReference
 import org.junit.Test
 import kotlin.test.assertEquals
 
 class CharTest {
 
-    @Test
-    fun testLexingChar() {
-        val tokens = lexCode("""@var('x')""")
-        assertToken<KATETokens.Var>(tokens[0])
-        assertToken<KATETokens.LeftParenthesis>(tokens[1])
-        assertToken<KATEToken.CharValue>(tokens[2]) { assertEquals('x', it.value) }
-        assertToken<KATETokens.RightParenthesis>(tokens[3])
+    private fun assertLexedCharEquals(charValue: String, expected: Char) {
+        testVariableReference<TypedToken.Char>("""@var('$charValue')""") {
+            assertEquals(it.value, expected)
+        }
     }
 
     @Test
-    fun testEscapesChar() {
-        val tokens = lexCode("""@var('\n')""")
-        assertToken<KATETokens.Var>(tokens[0])
-        assertToken<KATETokens.LeftParenthesis>(tokens[1])
-        assertToken<KATEToken.StringEscape>(tokens[2]) { assertEquals('\n', it.value) }
-        assertToken<KATETokens.RightParenthesis>(tokens[3])
+    fun testLexingChar() {
+        assertLexedCharEquals("x", 'x')
+        assertLexedCharEquals("\\n", '\n')
+        assertLexedCharEquals("\\t", '\t')
+        assertLexedCharEquals("\\r", '\r')
+        assertLexedCharEquals("\\b", '\b')
+        assertLexedCharEquals("\\'", '\'')
+        assertLexedCharEquals("\\\"", '\"')
+        assertLexedCharEquals("\\\\", '\\')
     }
 
 }

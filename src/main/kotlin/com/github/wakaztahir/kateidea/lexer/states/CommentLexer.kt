@@ -4,6 +4,7 @@ import com.github.wakaztahir.kateidea.lexer.*
 import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
 import com.github.wakaztahir.kateidea.lexer.state.getValue
 import com.github.wakaztahir.kateidea.lexer.state.setValue
+import com.github.wakaztahir.kateidea.lexer.token.KATEToken
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
 class CommentLexer(private val source: SourceStream) : CompositeLexState(), Lexer {

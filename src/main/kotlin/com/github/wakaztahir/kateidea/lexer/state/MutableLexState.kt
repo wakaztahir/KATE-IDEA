@@ -52,20 +52,6 @@ interface LexStateList : LexStateSaver {
 
 }
 
-fun <T : Enum<T>> Array<T>.getEnumOfOrdinal(ordinal: Int): T? {
-    for (value in this) {
-        if (value.ordinal == ordinal) {
-            return value
-        }
-    }
-    return null
-}
-
-fun <T : Enum<T>> Array<T>.getEnumOfOrdinalOrThrow(ordinal: Int): T {
-    return getEnumOfOrdinal(ordinal)
-        ?: throw IllegalStateException("Enum couldn't be restored from ordinal $ordinal because of missing ordinal in values $this")
-}
-
 class EnumState<T : Enum<T>>(override var state: T, private val values: Array<T>) : MutableLexSaveableState<T> {
 
     override fun toState(): Int {
@@ -73,7 +59,7 @@ class EnumState<T : Enum<T>>(override var state: T, private val values: Array<T>
     }
 
     override fun restoreState(state: Int) {
-        this.state = values.getEnumOfOrdinalOrThrow(state)
+        this.state = values[state]
     }
 
 }
@@ -113,14 +99,14 @@ class LazyLexState<T : LexStateSaver>(creator: () -> T) : LexSaveableState<T> {
 
     override fun toState(): Int {
         return if (!value.isInitialized()) {
-            -1
+            0
         } else {
             value.value.toState()
         }
     }
 
     override fun restoreState(state: Int) {
-        if (state != -1) {
+        if (state != 0) {
             this.value.value.restoreState(state)
         }
     }
@@ -164,40 +150,6 @@ class FloatLexState(override var state: Float) : MutableLexState<Float>, LexStat
     }
 }
 
-interface EnumStackLexState<T : Enum<T>> : LexStateSaver {
-
-    val values: Array<T>
-    val members: MutableList<T>
-
-    val size get() = members.size
-
-    fun peak(): T = members.last()
-
-    fun pop(): T = members.removeLast()
-
-    fun push(value: T) {
-        members.add(value)
-    }
-
-    override fun restoreState(state: Int) {
-        var tempValue = state
-        while (tempValue != 0) {
-            val componentValue = tempValue and -tempValue
-            members.add(values.getEnumOfOrdinalOrThrow(componentValue - 1))
-            tempValue = tempValue xor componentValue
-        }
-    }
-
-    override fun toState(): Int {
-        var stateValue = 0
-        for (member in members) {
-            stateValue = stateValue or (member.ordinal + 1)
-        }
-        return stateValue
-    }
-
-}
-
 open class CompositeLexState : LexStateList {
 
     override val members: MutableList<LexStateSaver> = mutableListOf()
@@ -235,11 +187,4 @@ open class CompositeLexState : LexStateList {
 
 inline fun <reified T : Enum<T>> CompositeLexState.state(enum: T): EnumState<T> {
     return state(EnumState(enum, enumValues<T>()))
-}
-
-inline fun <reified T : Enum<T>> enumStackOf(initial: T): EnumStackLexState<T> {
-    return object : EnumStackLexState<T> {
-        override val values: Array<T> = enumValues()
-        override val members: MutableList<T> = mutableListOf(initial)
-    }
 }

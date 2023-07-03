@@ -2,12 +2,15 @@ package com.github.wakaztahir.kateidea.lexer.states
 
 import com.github.wakaztahir.kateidea.lexer.*
 import com.github.wakaztahir.kateidea.lexer.state.*
+import com.github.wakaztahir.kateidea.lexer.states.value.DefaultExpressionValueLexer
 import com.github.wakaztahir.kateidea.lexer.states.value.PrimitiveValueLexer
+import com.github.wakaztahir.kateidea.lexer.token.KATEToken
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
 class AccessChainLexer(
     private val source: SourceStream,
-    private val isDefaultNoRaw: Boolean
+    private val isDefaultNoRaw: Boolean,
+    private val createNestedValueLexer : () -> DefaultExpressionValueLexer
 ) : Lexer, CompositeLexState() {
 
     enum class State {
@@ -17,24 +20,18 @@ class AccessChainLexer(
         ParameterOrEndingParenthesis,
         Parameter,
         CommaOrEndingParenthesis,
+        NestedValue,
         EndingBracket,
         SingleParameter
     }
 
-    private val enumStackState = state(enumStackOf(State.None))
-    private var state : State
-        get() = enumStackState.peak()
-        set(value) {
-            enumStackState.pop()
-            enumStackState.push(value)
-        }
+    private var state: State by state(State.None)
 
-    private val valueLexerState = lazyState { PrimitiveValueLexer(source) }
-    private val valueLexer get() = valueLexerState.state
+    private val nestedValueLexerState = lazyState(createNestedValueLexer)
+    private val nestedValueLexer by nestedValueLexerState
 
     private fun Char.isDPB() = this == '(' || this == '[' || this == '.'
-
-    fun isLexing(): Boolean = state != State.None || (valueLexerState.isInitialized() && valueLexer.isLexing())
+    fun isLexing(): Boolean = state != State.None || (nestedValueLexerState.isInitialized() && nestedValueLexer.isLexing())
 
     private fun resetState() {
         state = State.None
@@ -103,6 +100,14 @@ class AccessChainLexer(
                 return lexIdentifier(offset) ?: source.lexAsBadCharacters(offset)
             }
 
+            State.NestedValue -> {
+                return nestedValueLexer.lexTokenAtPosition(offset)?.let {
+                    return it.alsoOnIncrement {
+                        if (!nestedValueLexer.isLexing()) state = State.EndingBracket
+                    }
+                } ?: source.lexAsBadCharacters(offset)
+            }
+
             State.ParameterOrEndingParenthesis -> {
                 if (source.lookAhead(offset) == ')') {
                     return source.range(
@@ -111,9 +116,9 @@ class AccessChainLexer(
                         onIncrement = dpbStateIncrementerIfExistsAt(offset + 1)
                     )
                 }
-                valueLexer.lexTokenAtPosition(offset)?.let {
+                nestedValueLexer.lexTokenAtPosition(offset)?.let {
                     return it.alsoOnIncrement {
-                        if (!valueLexer.isLexing()) state = State.CommaOrEndingParenthesis
+                        if (!nestedValueLexer.isLexing()) state = State.CommaOrEndingParenthesis
                     }
                 }
                 return null
@@ -141,10 +146,10 @@ class AccessChainLexer(
             }
 
             State.Parameter -> {
-                valueLexer.lexTokenAtPosition(offset)?.let {
+                nestedValueLexer.lexTokenAtPosition(offset)?.let {
                     return it.alsoOnIncrement(
                         block = {
-                            if (!valueLexer.isLexing()) state = State.CommaOrEndingParenthesis
+                            if (!nestedValueLexer.isLexing()) state = State.CommaOrEndingParenthesis
                         }
                     )
                 }
@@ -164,12 +169,10 @@ class AccessChainLexer(
             }
 
             State.SingleParameter -> {
-                return valueLexer.lexTokenAtPosition(offset)?.let {
-                    return it.alsoOnIncrement(
-                        block = {
-                            if (!valueLexer.isLexing()) state = State.EndingBracket
-                        }
-                    )
+                return nestedValueLexer.lexTokenAtPosition(offset)?.let {
+                    return it.alsoOnIncrement {
+                        if (!nestedValueLexer.isLexing()) state = State.EndingBracket
+                    }
                 } ?: source.lexAsBadCharacters(offset)
             }
         }

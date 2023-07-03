@@ -1,40 +1,43 @@
 package com.github.wakaztahir.kateidea.lexer
 
+import com.github.wakaztahir.kateidea.lexer.token.KATEToken
+import com.github.wakaztahir.kateidea.lexer.token.TypedToken
+
 object KATETokens {
 
     // Language
 
-    object If : KATEToken.String("if") {
+    object If : TypedToken.String("if") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object For : KATEToken.String("for") {
+    object For : TypedToken.String("for") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object Var : KATEToken.String("var") {
+    object Var : TypedToken.String("var") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object SetVar : KATEToken.String("set_var") {
+    object SetVar : TypedToken.String("set_var") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object Function : KATEToken.String("function") {
+    object Function : TypedToken.String("function") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object Write : KATEToken.String("write") {
+    object Write : TypedToken.String("write") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
@@ -42,61 +45,61 @@ object KATETokens {
 
     // General
 
-    object Dot : KATEToken.Char('.') {
+    object Dot : TypedToken.Char('.') {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object Comma : KATEToken.Char(',') {
+    object Comma : TypedToken.Char(',') {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object SingleEqual : KATEToken.Char('=') {
+    object SingleEqual : TypedToken.Char('=') {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object LeftParenthesis : KATEToken.Char('(') {
+    object LeftParenthesis : TypedToken.Char('(') {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object RightParenthesis : KATEToken.Char(')') {
+    object RightParenthesis : TypedToken.Char(')') {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object LeftBracket : KATEToken.Char('[') {
+    object LeftBracket : TypedToken.Char('[') {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object RightBracket : KATEToken.Char(']') {
+    object RightBracket : TypedToken.Char(']') {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object LeftBrace : KATEToken.Char('{') {
+    object LeftBrace : TypedToken.Char('{') {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object RightBrace : KATEToken.Char('}') {
+    object RightBrace : TypedToken.Char('}') {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object At : KATEToken.Char('@') {
+    object At : TypedToken.Char('@') {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
@@ -104,13 +107,13 @@ object KATETokens {
 
     // Comment
 
-    object CommentStart : KATEToken.String("<%--") {
+    object CommentStart : TypedToken.String("<%--") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object CommentEnd : KATEToken.String("--%>") {
+    object CommentEnd : TypedToken.String("--%>") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
@@ -118,13 +121,13 @@ object KATETokens {
 
     // Embed
 
-    object Embed : KATEToken.String("embed") {
+    object Embed : TypedToken.String("embed") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object EmbedOnce : KATEToken.String("embed_once") {
+    object EmbedOnce : TypedToken.String("embed_once") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
@@ -132,25 +135,25 @@ object KATETokens {
 
     // Placeholder
 
-    object PlaceholderUse : KATEToken.String("use_placeholder") {
+    object PlaceholderUse : TypedToken.String("use_placeholder") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object Placeholder : KATEToken.String("placeholder") {
+    object Placeholder : TypedToken.String("placeholder") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object DefinePlaceholder : KATEToken.String("define_placeholder") {
+    object DefinePlaceholder : TypedToken.String("define_placeholder") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object EndDefinePlaceholder : KATEToken.String("end_define_placeholder") {
+    object EndDefinePlaceholder : TypedToken.String("end_define_placeholder") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
@@ -159,37 +162,37 @@ object KATETokens {
 
     // Modes
 
-    object DefaultNoRaw : KATEToken.String("default_no_raw") {
+    object DefaultNoRaw : TypedToken.String("default_no_raw") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object EndDefaultNoRaw : KATEToken.String("end_default_no_raw") {
+    object EndDefaultNoRaw : TypedToken.String("end_default_no_raw") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object PartialRaw : KATEToken.String("partial_raw") {
+    object PartialRaw : TypedToken.String("partial_raw") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object EndPartialRaw : KATEToken.String("end_partial_raw") {
+    object EndPartialRaw : TypedToken.String("end_partial_raw") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object Raw : KATEToken.String("raw") {
+    object Raw : TypedToken.String("raw") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
     }
 
-    object EndRaw : KATEToken.String("endraw") {
+    object EndRaw : TypedToken.String("endraw") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }

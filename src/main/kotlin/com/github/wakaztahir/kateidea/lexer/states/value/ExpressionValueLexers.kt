@@ -14,7 +14,13 @@ class DefaultExpressionValueLexer(
     val isDefaultNoRaw: Boolean
 ) : Lexer, CompositeLexState() {
 
-    private val accessChainLexerState = lazyState { AccessChainLexer(source = source, isDefaultNoRaw = isDefaultNoRaw) }
+    private val accessChainLexerState = lazyState {
+        AccessChainLexer(
+            source = source,
+            isDefaultNoRaw = isDefaultNoRaw,
+            createNestedValueLexer = { DefaultExpressionValueLexer(source, isDefaultNoRaw) }
+        )
+    }
     private val valueLexerState = lazyState { PrimitiveValueLexer(source = source) }
 
     private val accessChainLexer get() = accessChainLexerState.state

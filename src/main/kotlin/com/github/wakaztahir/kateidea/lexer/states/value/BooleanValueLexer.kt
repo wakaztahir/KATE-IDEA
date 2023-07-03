@@ -1,6 +1,6 @@
 package com.github.wakaztahir.kateidea.lexer.states.value
 
-import com.github.wakaztahir.kateidea.lexer.KATEToken
+import com.github.wakaztahir.kateidea.lexer.token.KATEToken
 import com.github.wakaztahir.kateidea.lexer.range
 import com.github.wakaztahir.kateidea.lexer.states.TokenRange
 import com.github.wakaztahir.kateidea.lexer.states.ValueLexer

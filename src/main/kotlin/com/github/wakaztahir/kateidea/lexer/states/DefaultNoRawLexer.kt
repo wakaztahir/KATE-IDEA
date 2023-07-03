@@ -1,6 +1,6 @@
 package com.github.wakaztahir.kateidea.lexer.states
 
-import com.github.wakaztahir.kateidea.lexer.KATEToken
+import com.github.wakaztahir.kateidea.lexer.token.KATEToken
 import com.github.wakaztahir.kateidea.lexer.range
 import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
 import com.wakaztahir.kate.lexer.stream.SourceStream

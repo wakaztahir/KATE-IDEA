@@ -6,7 +6,7 @@ import com.github.wakaztahir.kateidea.lexer.state.getValue
 import com.github.wakaztahir.kateidea.lexer.state.setValue
 import com.github.wakaztahir.kateidea.lexer.state.state
 import com.github.wakaztahir.kateidea.lexer.states.value.DefaultExpressionValueLexer
-import com.github.wakaztahir.kateidea.lexer.states.value.PrimitiveValueLexer
+import com.github.wakaztahir.kateidea.lexer.token.KATEToken
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
 class PlaceholderInvocationLexer(

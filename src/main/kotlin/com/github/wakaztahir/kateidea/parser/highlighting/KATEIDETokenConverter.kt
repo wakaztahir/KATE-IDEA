@@ -1,8 +1,9 @@
 package com.github.wakaztahir.kateidea.parser.highlighting
 
-import com.github.wakaztahir.kateidea.lexer.KATEToken
+import com.github.wakaztahir.kateidea.lexer.token.KATEToken
 import com.github.wakaztahir.kateidea.lexer.KATETokens
 import com.github.wakaztahir.kateidea.lexer.TokenConverter
+import com.github.wakaztahir.kateidea.lexer.token.TypedToken
 
 object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
 
@@ -26,7 +27,7 @@ object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
         return KATEIDETokens.Text
     }
 
-    override fun convert(token: KATEToken.StringEscape): KATEIDEToken {
+    override fun convert(token: TypedToken.CharEscape): KATEIDEToken {
         return if (token.isValid) {
             KATEIDETokens.ValidStringEscape
         } else {
@@ -34,7 +35,7 @@ object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
         }
     }
 
-    override fun convert(token: KATEToken.StringValue): KATEIDEToken {
+    override fun convert(token: TypedToken.StringValue): KATEIDEToken {
         return KATEIDETokens.StringValue
     }
 
@@ -50,7 +51,7 @@ object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
         return KATEIDETokens.LongValue
     }
 
-    override fun convert(token: KATEToken.CharValue): KATEIDEToken {
+    override fun convert(token: TypedToken.CharValue): KATEIDEToken {
         return KATEIDETokens.CharValue
     }
 

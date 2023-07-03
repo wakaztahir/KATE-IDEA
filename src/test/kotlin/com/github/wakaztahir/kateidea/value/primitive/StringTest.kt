@@ -1,26 +1,30 @@
 package com.github.wakaztahir.kateidea.value.primitive
 
-import com.github.wakaztahir.kateidea.assertToken
-import com.github.wakaztahir.kateidea.lexCode
-import com.github.wakaztahir.kateidea.lexer.KATEToken
-import com.github.wakaztahir.kateidea.lexer.KATETokens
+import com.github.wakaztahir.kateidea.extractStringFromTokens
+import com.github.wakaztahir.kateidea.lexTemplateCode
+import com.github.wakaztahir.kateidea.testVariableReference
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class StringTest {
 
+    private fun assertLexedStringEquals(expected: String, actual: String) {
+        val tokens = lexTemplateCode("""@var("$expected")""")
+        testVariableReference(0, tokens)
+        assertEquals(extractStringFromTokens(tokens, 2, tokens.size - 1), actual)
+    }
+
     @Test
     fun testLexingString() {
-        val tokens = lexCode("""@var("Hello World\nHello\n\nWorld")""")
-        assertToken<KATETokens.Var>(tokens[0])
-        assertToken<KATETokens.LeftParenthesis>(tokens[1])
-        assertToken<KATEToken.String>(tokens[2]) { assertEquals("Hello World", it.value) }
-        assertToken<KATEToken.StringEscape>(tokens[3]) { assertEquals('\n',it.value) }
-        assertToken<KATEToken.String>(tokens[4]){ assertEquals("Hello",it.value) }
-        assertToken<KATEToken.StringEscape>(tokens[5]) { assertEquals('\n',it.value) }
-        assertToken<KATEToken.StringEscape>(tokens[6]) { assertEquals('\n',it.value) }
-        assertToken<KATEToken.String>(tokens[7]){ assertEquals("World",it.value) }
-        assertToken<KATETokens.RightParenthesis>(tokens[8])
+        assertLexedStringEquals("Hello World\\nHello\\n\\nWorld", "Hello World\nHello\n\nWorld")
+        assertLexedStringEquals("\\n\\tCheck\\r\\t\\n", "\n\tCheck\r\t\n")
+        assertLexedStringEquals("\\nA\\tCheck\\rB\\tC\\nD", "\nA\tCheck\rB\tC\nD")
+        assertLexedStringEquals("\\n", "\n")
+        assertLexedStringEquals("\\n\\n", "\n\n")
+        assertLexedStringEquals("\\n\\n\\'\\'", "\n\n''")
+        assertLexedStringEquals("\\\"\\\"", "\"\"")
+        assertLexedStringEquals("a\\nb\\n", "a\nb\n")
+        assertLexedStringEquals("a\\nb\\n\\n", "a\nb\n\n")
     }
 
 }

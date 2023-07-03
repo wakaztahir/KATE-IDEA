@@ -1,4 +1,4 @@
-package com.github.wakaztahir.kateidea
+package com.github.wakaztahir.kateidea.state
 
 import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
 import com.github.wakaztahir.kateidea.lexer.state.IntLexState
@@ -16,11 +16,13 @@ class LexerStateTest {
             IntLexState(82),
             IntLexState(73),
             IntLexState(64),
-            IntLexState(55)
+            IntLexState(55),
+            IntLexState(0),
+            IntLexState(1),
         )
         state.members.addAll(expected)
         val saved = state.toState()
-        for (x in expected) x.restoreState(0)
+        for (x in expected) x.state = -1
         state.restoreState(saved)
         assert(expected == state.members) {
             "Expected : $expected\nActual : ${state.members}"

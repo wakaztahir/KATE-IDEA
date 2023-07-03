@@ -1,5 +1,8 @@
 package com.github.wakaztahir.kateidea.lexer
 
+import com.github.wakaztahir.kateidea.lexer.token.KATEToken
+import com.github.wakaztahir.kateidea.lexer.token.TypedToken
+
 interface TokenConverter<T> {
 
     fun convert(token : KATETokens.Dot) : T
@@ -12,9 +15,9 @@ interface TokenConverter<T> {
 
     fun convert(token : KATEToken.Text) : T
 
-    fun convert(token : KATEToken.StringEscape) : T
+    fun convert(token : TypedToken.CharEscape) : T
 
-    fun convert(token : KATEToken.StringValue) : T
+    fun convert(token : TypedToken.StringValue) : T
 
     fun convert(token: KATEToken.IntValue): T
 
@@ -22,7 +25,7 @@ interface TokenConverter<T> {
 
     fun convert(token: KATEToken.LongValue): T
 
-    fun convert(token: KATEToken.CharValue): T
+    fun convert(token: TypedToken.CharValue): T
 
     fun convert(token: KATEToken.BooleanValue): T
 

@@ -1,7 +1,5 @@
 package com.github.wakaztahir.kateidea.parser.highlighting
 
-import com.github.wakaztahir.kateidea.lexer.KATEToken
-
 
 object KATEIDETokens {
 

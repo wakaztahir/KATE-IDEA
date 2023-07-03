@@ -1,9 +1,9 @@
 package com.github.wakaztahir.kateidea.lexer.states.value
 
-import com.github.wakaztahir.kateidea.lexer.KATEToken
 import com.github.wakaztahir.kateidea.lexer.isAtCurrentPosition
 import com.github.wakaztahir.kateidea.lexer.states.TokenRange
 import com.github.wakaztahir.kateidea.lexer.states.ValueLexer
+import com.github.wakaztahir.kateidea.lexer.token.TypedToken
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
 object CharValueLexer : ValueLexer {
@@ -34,11 +34,11 @@ object CharValueLexer : ValueLexer {
                 return TokenRange(
                     start = pointer + offset,
                     token = if (isEscape || characterValue == null) {
-                        KATEToken.StringEscape(
+                        TypedToken.CharEscape(
                             value = characterValue ?: escapeChar,
                             isValid = characterValue != null
                         )
-                    } else KATEToken.CharValue(characterValue),
+                    } else TypedToken.CharValue(characterValue),
                     length = 3 + escapeOffset,
                     onIncrement = null
                 )

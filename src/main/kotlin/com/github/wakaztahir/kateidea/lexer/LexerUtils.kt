@@ -1,6 +1,8 @@
 package com.github.wakaztahir.kateidea.lexer
 
 import com.github.wakaztahir.kateidea.lexer.states.TokenRange
+import com.github.wakaztahir.kateidea.lexer.token.KATEToken
+import com.github.wakaztahir.kateidea.lexer.token.TypedToken
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
 @Suppress("NOTHING_TO_INLINE")
@@ -48,7 +50,7 @@ fun SourceStream.lexAsBadCharacters(
 fun SourceStream.directiveOffsetAtPosition(
     isDefaultNoRaw: Boolean,
     offset: Int,
-    directive: KATEToken.String
+    directive: TypedToken.String
 ): Int? {
     val startOffset = if (isAtCurrentPosition(offset = offset, KATETokens.At.value)) 1 else {
         if (isDefaultNoRaw) return null else 0
@@ -59,7 +61,7 @@ fun SourceStream.directiveOffsetAtPosition(
 fun SourceStream.directiveRangeAtPosition(
     isDefaultNoRaw: Boolean,
     offset: Int,
-    directive: KATEToken.String,
+    directive: TypedToken.String,
     onIncrement: (() -> Unit)?
 ): TokenRange? {
     return directiveOffsetAtPosition(isDefaultNoRaw, offset, directive)?.let { startOffset ->

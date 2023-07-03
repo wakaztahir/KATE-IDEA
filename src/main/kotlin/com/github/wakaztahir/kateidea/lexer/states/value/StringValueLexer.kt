@@ -1,6 +1,5 @@
 package com.github.wakaztahir.kateidea.lexer.states.value
 
-import com.github.wakaztahir.kateidea.lexer.KATEToken
 import com.github.wakaztahir.kateidea.lexer.isAtCurrentPosition
 import com.github.wakaztahir.kateidea.lexer.readTextAheadUntilLambdaOrStreamEnds
 import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
@@ -8,6 +7,7 @@ import com.github.wakaztahir.kateidea.lexer.state.getValue
 import com.github.wakaztahir.kateidea.lexer.state.setValue
 import com.github.wakaztahir.kateidea.lexer.states.Lexer
 import com.github.wakaztahir.kateidea.lexer.states.TokenRange
+import com.github.wakaztahir.kateidea.lexer.token.TypedToken
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
 class StringValueLexer(private val stream: SourceStream) : Lexer, CompositeLexState() {
@@ -27,7 +27,7 @@ class StringValueLexer(private val stream: SourceStream) : Lexer, CompositeLexSt
         val currChar = stream.lookAhead(offset + text.length)
         return TokenRange(
             start = stream.pointer + start,
-            token = KATEToken.StringValue(text),
+            token = TypedToken.StringValue(text),
             length = text.length + (if (currChar != null && currChar != '\\') 1 else 0) + lengthOffset,
             onIncrement = when (currChar) {
                 '\\' -> {
@@ -51,7 +51,7 @@ class StringValueLexer(private val stream: SourceStream) : Lexer, CompositeLexSt
                 val realValue = CharValueLexer.transformCharAfterBackslash(escapeChar)
                 TokenRange(
                     start = stream.pointer + start,
-                    token = KATEToken.StringEscape(realValue ?: escapeChar, isValid = realValue != null),
+                    token = TypedToken.CharEscape(realValue ?: escapeChar, isValid = realValue != null),
                     length = 2 + lengthOffset,
                     onIncrement = if (!isLexingString) {
                         { isLexingString = true }
