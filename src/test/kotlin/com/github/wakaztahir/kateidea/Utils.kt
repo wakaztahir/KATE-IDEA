@@ -55,6 +55,13 @@ fun lexTemplateCode(code: String): List<KATEToken> {
     return tokens
 }
 
+fun List<KATEToken>.assertNoErrorToken() {
+    for(token in this) {
+        assert(token !is KATEToken.ErrorToken)
+        assert(token !is KATEToken.BadCharacter)
+    }
+}
+
 /**
  * extract string from tokens , text is extracted from tokens of type [TypedToken]
  */

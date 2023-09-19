@@ -9,7 +9,7 @@ class IntTest {
 
     @Test
     fun testLexingInt() {
-        testVariableReference<KATEToken.IntValue>("""@var(118)""") {
+        testVariableReference<KATEToken.IntValue>("""#var(118)""") {
             assertEquals(118, it.value)
         }
     }

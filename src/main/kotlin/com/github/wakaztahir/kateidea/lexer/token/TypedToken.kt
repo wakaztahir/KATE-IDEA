@@ -15,10 +15,16 @@ sealed interface TypedToken<T> : KATEToken {
 
     abstract class String(override val value: kotlin.String) : TypedToken<kotlin.String> {
         override val length: Int get() = value.length
+        override fun toString(): kotlin.String {
+            return value
+        }
     }
 
     abstract class Char(override val value: kotlin.Char) : TypedToken<kotlin.Char> {
         override val length: Int get() = 1
+        override fun toString(): kotlin.String {
+            return value.toString()
+        }
     }
 
     class CharValue(value: kotlin.Char) : Char(value = value) {

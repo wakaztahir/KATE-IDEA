@@ -1,59 +1,21 @@
 package com.github.wakaztahir.kateidea.lexer.states
 
 import com.github.wakaztahir.kateidea.lexer.*
-import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
-import com.github.wakaztahir.kateidea.lexer.state.getValue
-import com.github.wakaztahir.kateidea.lexer.state.setValue
-import com.github.wakaztahir.kateidea.lexer.state.state
 import com.github.wakaztahir.kateidea.lexer.states.value.DefaultExpressionValueLexer
 import com.github.wakaztahir.kateidea.lexer.token.KATEToken
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
 class VariableDeclarationLexer(
     private val source: SourceStream,
+    private val state : LexerState,
     private val isDefaultNoRaw: Boolean
-) : Lexer, CompositeLexState() {
+) : Lexer {
 
-    enum class State {
-        None,
-        VariableNameOrParenthesis,
-        EqualOnly,
-        Value,
-        RefValue,
-        RightParenthesis
-    }
-
-    private var state by state(State.None)
-    private val valueLexer by lazyState { DefaultExpressionValueLexer(source, isDefaultNoRaw = isDefaultNoRaw) }
-
-    private fun resetState() {
-        state = State.None
-    }
+    private val valueLexer by lazy { DefaultExpressionValueLexer(source, state, isDefaultNoRaw = isDefaultNoRaw) }
 
     override fun lexTokenAtPosition(offset: Int): TokenRange? {
-        when (state) {
-            State.None -> {
-                return source.directiveRangeAtPosition(isDefaultNoRaw, offset, KATETokens.Var) {
-                    state = State.VariableNameOrParenthesis
-                }
-            }
-
-            State.VariableNameOrParenthesis -> {
-                if (isDefaultNoRaw && source.lookAhead(offset) == '(') {
-                    return source.range(offset, KATETokens.LeftParenthesis) {
-                        state = State.RefValue
-                    }
-                }
-                source.lexWhitespaces(offset = offset)?.let { return it }
-                val word = source.readSingleWordAhead(offset = offset)
-                return word?.let {
-                    source.range(offset, KATEToken.Identifier(it)) {
-                        state = State.EqualOnly
-                    }
-                }
-            }
-
-            State.EqualOnly -> {
+        if(state.isLexingVariableNameOrParen){
+            if(state.isLexingEqual){
                 return source.lookAhead(offset)?.let { char ->
                     when (char) {
                         ' ' -> {
@@ -62,7 +24,8 @@ class VariableDeclarationLexer(
 
                         '=' -> {
                             return source.range(offset, KATETokens.SingleEqual) {
-                                state = State.Value
+                                state.isLexingEqual = false
+                                state.isLexingValue = true
                             }
                         }
 
@@ -71,45 +34,59 @@ class VariableDeclarationLexer(
                         }
                     }
                 }
-            }
-
-            State.Value, State.RefValue -> {
-                if (state != State.RefValue) {
-                    source.lexWhitespaces(offset)?.let { return it }
-                }
-                valueLexer.lexTokenAtPosition(offset)?.let {
-                    return it.alsoOnIncrement(
-                        block = when (state) {
-                            State.Value -> {
-                                {
-                                    if (!valueLexer.isLexing()) resetState()
-                                }
-                            }
-
-                            State.RefValue -> {
-                                {
-                                    if (!valueLexer.isLexing()) state = State.RightParenthesis
-                                }
-                            }
-
-                            else -> {
-                                error("Not supposed to be here")
-                            }
-                        }
-                    )
-                }
-                return source.lexAsBadCharacters(offset)
-            }
-
-            State.RightParenthesis -> {
+            } else if(state.isLexingRightParen){
                 source.lookAhead(offset)?.let {
                     if (it == ')') {
                         return source.range(offset, KATETokens.RightParenthesis) {
-                            resetState()
+                            state.isLexingVariableNameOrParen = false
+                            state.isLexingRefValue = false
+                            state.isLexingValue = false
+                            state.isLexingRightParen = false
                         }
                     }
                     return source.lexAsBadCharacters(offset)
                 }
+            } else if(state.isLexingRefValue || state.isLexingValue) {
+                if (!state.isLexingRefValue) {
+                    source.lexWhitespaces(offset)?.let { return it }
+                }
+                valueLexer.lexTokenAtPosition(offset)?.let {
+                    return it.alsoOnIncrement(
+                        block = if(state.isLexingRefValue) {
+                            {
+                                if (!valueLexer.isLexing()) state.isLexingRightParen = true
+                            }
+                        } else if(state.isLexingValue) {
+                            {
+                                if (!valueLexer.isLexing()) {
+                                    state.isLexingVariableNameOrParen = false
+                                    state.isLexingRefValue = false
+                                    state.isLexingValue = false
+                                }
+                            }
+                        } else {
+                            error("Not supposed to be here")
+                        }
+                    )
+                }
+                return source.lexAsBadCharacters(offset)
+            } else {
+                if (isDefaultNoRaw && source.lookAhead(offset) == '(') {
+                    return source.range(offset, KATETokens.LeftParenthesis) {
+                        state.isLexingRefValue = true
+                    }
+                }
+                source.lexWhitespaces(offset = offset)?.let { return it }
+                val word = source.readSingleWordAhead(offset = offset)
+                return word?.let {
+                    source.range(offset, KATEToken.Identifier(it)) {
+                        state.isLexingEqual = true
+                    }
+                }
+            }
+        } else {
+            return source.directiveRangeAtPosition(isDefaultNoRaw, offset, KATETokens.Var) {
+                state.isLexingVariableNameOrParen = true
             }
         }
         return null

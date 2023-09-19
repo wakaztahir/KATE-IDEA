@@ -1,6 +1,5 @@
 package com.github.wakaztahir.kateidea.lexer
 
-import com.github.wakaztahir.kateidea.lexer.token.KATEToken
 import com.github.wakaztahir.kateidea.lexer.token.TypedToken
 
 object KATETokens {
@@ -14,6 +13,12 @@ object KATETokens {
     }
 
     object For : TypedToken.String("for") {
+        override fun <T> convert(converter: TokenConverter<T>): T {
+            return converter.convert(this)
+        }
+    }
+
+    object EndFor : TypedToken.String("endfor") {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }
@@ -99,7 +104,7 @@ object KATETokens {
         }
     }
 
-    object At : TypedToken.Char('@') {
+    object Hash : TypedToken.Char('#') {
         override fun <T> convert(converter: TokenConverter<T>): T {
             return converter.convert(this)
         }

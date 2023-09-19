@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 class CharTest {
 
     private fun assertLexedCharEquals(charValue: String, expected: Char) {
-        testVariableReference<TypedToken.Char>("""@var('$charValue')""") {
+        testVariableReference<TypedToken.Char>("""#var('$charValue')""") {
             assertEquals(it.value, expected)
         }
     }

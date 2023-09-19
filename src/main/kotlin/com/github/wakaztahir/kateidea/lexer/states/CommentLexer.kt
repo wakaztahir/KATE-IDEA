@@ -1,30 +1,22 @@
 package com.github.wakaztahir.kateidea.lexer.states
 
 import com.github.wakaztahir.kateidea.lexer.*
-import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
-import com.github.wakaztahir.kateidea.lexer.state.getValue
-import com.github.wakaztahir.kateidea.lexer.state.setValue
 import com.github.wakaztahir.kateidea.lexer.token.KATEToken
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
-class CommentLexer(private val source: SourceStream) : CompositeLexState(), Lexer {
-
-    private var hasLexedComment by state(false)
-    private var isLexingComment by state(false)
+class CommentLexer(
+    private val source: SourceStream,
+    private val state: LexerState
+) : Lexer {
 
     private fun resetState() {
-        hasLexedComment = false
-        isLexingComment = false
+        state.hasLexedCommentContent = false
+        state.isLexingComment = false
     }
 
     override fun lexTokenAtPosition(offset: Int): TokenRange? {
-        if (source.isAtCurrentPositionFast(offset, KATETokens.CommentStart.value)) {
-            return source.range(offset, KATETokens.CommentStart) {
-                isLexingComment = true
-            }
-        }
-        if (isLexingComment) {
-            if (hasLexedComment) {
+        if (state.isLexingComment) {
+            if (state.hasLexedCommentContent) {
                 if (source.isAtCurrentPositionFast(offset, KATETokens.CommentEnd.value)) {
                     return source.range(offset, KATETokens.CommentEnd) {
                         resetState()
@@ -34,10 +26,16 @@ class CommentLexer(private val source: SourceStream) : CompositeLexState(), Lexe
                 val commentText = source.readTextAheadUntil(offset, KATETokens.CommentEnd.value)
                 return if (commentText != null) {
                     source.range(offset, KATEToken.CommentString(commentText)) {
-                        hasLexedComment = true
+                        state.hasLexedCommentContent = true
                     }
                 } else {
                     null
+                }
+            }
+        } else {
+            if (source.isAtCurrentPositionFast(offset, KATETokens.CommentStart.value)) {
+                return source.range(offset, KATETokens.CommentStart) {
+                    state.isLexingComment = true
                 }
             }
         }

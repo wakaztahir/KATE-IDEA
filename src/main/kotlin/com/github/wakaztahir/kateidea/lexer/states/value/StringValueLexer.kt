@@ -1,24 +1,23 @@
 package com.github.wakaztahir.kateidea.lexer.states.value
 
+import com.github.wakaztahir.kateidea.lexer.LexerState
 import com.github.wakaztahir.kateidea.lexer.isAtCurrentPosition
 import com.github.wakaztahir.kateidea.lexer.readTextAheadUntilLambdaOrStreamEnds
-import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
-import com.github.wakaztahir.kateidea.lexer.state.getValue
-import com.github.wakaztahir.kateidea.lexer.state.setValue
 import com.github.wakaztahir.kateidea.lexer.states.Lexer
 import com.github.wakaztahir.kateidea.lexer.states.TokenRange
 import com.github.wakaztahir.kateidea.lexer.token.TypedToken
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
-class StringValueLexer(private val stream: SourceStream) : Lexer, CompositeLexState() {
-
-    private var isLexingString by state(false)
+class StringValueLexer(
+    private val stream: SourceStream,
+    private val state : LexerState
+) : Lexer {
 
     private fun resetState() {
-        isLexingString = false
+        state.isLexingString = false
     }
 
-    fun isLexing(): Boolean = isLexingString
+    fun isLexing(): Boolean = state.isLexingString
 
     private fun lexStringUntilEndOrEscapeSeq(offset: Int, start: Int = offset, lengthOffset: Int = 0): TokenRange? {
         val text = stream.readTextAheadUntilLambdaOrStreamEnds(offset) { currChar, _ ->
@@ -32,7 +31,7 @@ class StringValueLexer(private val stream: SourceStream) : Lexer, CompositeLexSt
             onIncrement = when (currChar) {
                 '\\' -> {
                     {
-                        isLexingString = true
+                        state.isLexingString = true
                     }
                 }
 
@@ -53,8 +52,8 @@ class StringValueLexer(private val stream: SourceStream) : Lexer, CompositeLexSt
                     start = stream.pointer + start,
                     token = TypedToken.CharEscape(realValue ?: escapeChar, isValid = realValue != null),
                     length = 2 + lengthOffset,
-                    onIncrement = if (!isLexingString) {
-                        { isLexingString = true }
+                    onIncrement = if (!state.isLexingString) {
+                        { state.isLexingString = true }
                     } else null
                 )
             }
@@ -64,7 +63,7 @@ class StringValueLexer(private val stream: SourceStream) : Lexer, CompositeLexSt
     }
 
     override fun lexTokenAtPosition(offset: Int): TokenRange? {
-        if (isLexingString) {
+        if (state.isLexingString) {
             lexEscapeToken(offset = offset)?.let { return it }
             lexStringUntilEndOrEscapeSeq(offset = offset)?.let { return it }
         } else if (stream.isAtCurrentPosition(offset = offset, '"')) {

@@ -9,7 +9,7 @@ class DoubleTest {
 
     @Test
     fun testLexingInt() {
-        testVariableReference<KATEToken.DoubleValue>("""@var(118.567)""") {
+        testVariableReference<KATEToken.DoubleValue>("""#var(118.567)""") {
             assertEquals(118.567, it.value)
         }
     }

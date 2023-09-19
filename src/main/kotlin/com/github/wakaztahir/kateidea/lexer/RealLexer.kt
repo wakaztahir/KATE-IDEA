@@ -7,7 +7,8 @@ import com.wakaztahir.kate.lexer.stream.*
 class RealLexer(val source: TextSourceStream) {
 
     // States
-    val current = DefaultNoRawLexer(source, false)
+    val state = LexerState()
+    val current = DefaultNoRawLexer(source, state, false)
 
     private fun lexToken(offset: Int): TokenRange? {
         return current.lexTokenAtPosition(offset)
@@ -18,11 +19,11 @@ class RealLexer(val source: TextSourceStream) {
     }
 
     fun getState(): Int {
-        return current.toState()
+        return state.save()
     }
 
-    fun restoreState(state: Int) {
-        current.restoreState(state)
+    fun restoreState(intState: Int) {
+        state.restore(intState)
     }
 
 }

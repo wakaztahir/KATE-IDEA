@@ -47,6 +47,9 @@ interface TokenConverter<T> {
 
     fun convert(token: KATETokens.For): T
 
+
+    fun convert(token: KATETokens.EndFor): T
+
     fun convert(token: KATETokens.Var): T
 
     fun convert(token: KATETokens.Function): T
@@ -75,7 +78,7 @@ interface TokenConverter<T> {
 
     fun convert(token: KATETokens.RightBrace): T
 
-    fun convert(token: KATETokens.At): T
+    fun convert(token: KATETokens.Hash): T
 
     fun convert(token: KATETokens.CommentStart): T
 

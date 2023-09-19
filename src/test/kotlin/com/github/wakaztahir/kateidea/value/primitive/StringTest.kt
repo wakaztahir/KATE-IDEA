@@ -9,7 +9,7 @@ import org.junit.Test
 class StringTest {
 
     private fun assertLexedStringEquals(expected: String, actual: String) {
-        val tokens = lexTemplateCode("""@var("$expected")""")
+        val tokens = lexTemplateCode("""#var("$expected")""")
         testVariableReference(0, tokens)
         assertEquals(extractStringFromTokens(tokens, 2, tokens.size - 1), actual)
     }

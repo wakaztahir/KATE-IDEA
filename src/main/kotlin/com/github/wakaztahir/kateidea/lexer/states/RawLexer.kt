@@ -1,25 +1,23 @@
 package com.github.wakaztahir.kateidea.lexer.states
 
 import com.github.wakaztahir.kateidea.lexer.*
-import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
-import com.github.wakaztahir.kateidea.lexer.state.getValue
-import com.github.wakaztahir.kateidea.lexer.state.setValue
 import com.github.wakaztahir.kateidea.lexer.token.KATEToken
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
-class RawLexer(private val source: SourceStream, private val isDefaultNoRaw: Boolean) : Lexer, CompositeLexState() {
-
-    private var isLexingRaw by state(false)
-    private var hasLexedRawText by state(false)
+class RawLexer(
+    private val source: SourceStream,
+    private val state: LexerState,
+    private val isDefaultNoRaw: Boolean
+) : Lexer {
 
     private fun resetState() {
-        isLexingRaw = false
-        hasLexedRawText = false
+        state.isLexingRaw = false
+        state.hasLexedRawText = false
     }
 
     override fun lexTokenAtPosition(offset: Int): TokenRange? {
-        if (isLexingRaw) {
-            if (hasLexedRawText) {
+        if (state.isLexingRaw) {
+            if (state.hasLexedRawText) {
                 return source.directiveRangeAtPosition(isDefaultNoRaw, offset, KATETokens.EndRaw) {
                     resetState()
                 }
@@ -34,12 +32,12 @@ class RawLexer(private val source: SourceStream, private val isDefaultNoRaw: Boo
             }
             return text?.let { rawText ->
                 source.range(offset = offset, KATEToken.OutputString(rawText)) {
-                    hasLexedRawText = true
+                    state.hasLexedRawText = true
                 }
             }
         }
         return source.directiveRangeAtPosition(isDefaultNoRaw, offset, KATETokens.Raw) {
-            isLexingRaw = true
+            state.isLexingRaw = true
         }
     }
 

@@ -1,22 +1,21 @@
 package com.github.wakaztahir.kateidea.lexer.states
 
 import com.github.wakaztahir.kateidea.lexer.*
-import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
-import com.github.wakaztahir.kateidea.lexer.state.getValue
-import com.github.wakaztahir.kateidea.lexer.state.setValue
 import com.github.wakaztahir.kateidea.lexer.token.KATEToken
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
-class EmbedLexer(private val source: SourceStream, private val isDefaultNoRaw: Boolean) : Lexer, CompositeLexState() {
-
-    private var isLexingPath by state(false)
+class EmbedLexer(
+    private val source: SourceStream,
+    private val state : LexerState,
+    private val isDefaultNoRaw: Boolean
+) : Lexer {
 
     private fun resetState() {
-        isLexingPath = false
+        state.isLexingEmbedPath = false
     }
 
     override fun lexTokenAtPosition(offset: Int): TokenRange? {
-        if (isLexingPath) {
+        if (state.isLexingEmbedPath) {
             source.lexWhitespaces(offset, null)?.let { return it }
             val text = source.readTextAheadUntil(offset = offset, '\n')
             return text?.let { rawText ->
@@ -34,7 +33,7 @@ class EmbedLexer(private val source: SourceStream, private val isDefaultNoRaw: B
                 token = token,
                 lengthOffset = startOffset,
                 onIncrement = {
-                    isLexingPath = true
+                    state.isLexingEmbedPath = true
                 }
             )
         }

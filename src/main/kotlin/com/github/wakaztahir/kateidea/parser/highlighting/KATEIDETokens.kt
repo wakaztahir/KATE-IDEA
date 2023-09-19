@@ -15,6 +15,11 @@ object KATEIDETokens {
             get() = HighlightingAttributeKeys.Keyword
     }
 
+    object EndFor : KATEIDEToken("Endfor") {
+        override val highlightingAttributeKeys: HighlightingAttributeKeys
+            get() = HighlightingAttributeKeys.Keyword
+    }
+
     object Var : KATEIDEToken("Var") {
         override val highlightingAttributeKeys: HighlightingAttributeKeys
             get() = HighlightingAttributeKeys.Keyword

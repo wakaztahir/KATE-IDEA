@@ -52,7 +52,7 @@ fun SourceStream.directiveOffsetAtPosition(
     offset: Int,
     directive: TypedToken.String
 ): Int? {
-    val startOffset = if (isAtCurrentPosition(offset = offset, KATETokens.At.value)) 1 else {
+    val startOffset = if (isAtCurrentPosition(offset = offset, KATETokens.Hash.value)) 1 else {
         if (isDefaultNoRaw) return null else 0
     }
     return if (isAtCurrentPositionText(offset = offset + startOffset, directive.value)) startOffset else null

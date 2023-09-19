@@ -1,12 +1,13 @@
 package com.github.wakaztahir.kateidea.lexer.states.value
 
+import com.github.wakaztahir.kateidea.lexer.LexerState
 import com.github.wakaztahir.kateidea.lexer.states.Lexer
 import com.github.wakaztahir.kateidea.lexer.states.TokenRange
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
-class PrimitiveValueLexer(private val source: SourceStream) : Lexer {
+class PrimitiveValueLexer(private val source: SourceStream, private val state: LexerState) : Lexer {
 
-    private val stringLexer = StringValueLexer(stream = source)
+    private val stringLexer = StringValueLexer(stream = source, state = state)
 
     override fun lexTokenAtPosition(offset: Int): TokenRange? {
         stringLexer.lexTokenAtPosition(offset)?.let {
@@ -24,14 +25,6 @@ class PrimitiveValueLexer(private val source: SourceStream) : Lexer {
         return null
     }
 
-    fun isLexing() : Boolean = stringLexer.isLexing()
-
-    override fun toState(): Int {
-        return stringLexer.toState()
-    }
-
-    override fun restoreState(state: Int) {
-        stringLexer.restoreState(state)
-    }
+    fun isLexing(): Boolean = stringLexer.isLexing()
 
 }

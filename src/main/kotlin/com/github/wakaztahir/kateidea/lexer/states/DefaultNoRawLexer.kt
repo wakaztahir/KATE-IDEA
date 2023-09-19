@@ -1,26 +1,25 @@
 package com.github.wakaztahir.kateidea.lexer.states
 
+import com.github.wakaztahir.kateidea.lexer.LexerState
 import com.github.wakaztahir.kateidea.lexer.token.KATEToken
 import com.github.wakaztahir.kateidea.lexer.range
-import com.github.wakaztahir.kateidea.lexer.state.CompositeLexState
 import com.wakaztahir.kate.lexer.stream.SourceStream
 
 class DefaultNoRawLexer(
     private val source: SourceStream,
-    private val endAtDefaultNoRaw: Boolean
-) : Lexer, CompositeLexState() {
+    private val state: LexerState,
+    private val endAtDefaultNoRaw: Boolean,
+) : Lexer {
 
-    private val lexersList: List<Lexer> = state(
-        listOf(
-            CommentLexer(source),
-            EmbedLexer(source, isDefaultNoRaw = true),
-            RawLexer(source, isDefaultNoRaw = true),
-            RuntimeWriteLexer(source, isDefaultNoRaw = true),
-            PlaceholderUseLexer(source, isDefaultNoRaw = true),
-            PlaceholderInvocationLexer(source, isDefaultNoRaw = true),
-            VariableDeclarationLexer(source, isDefaultNoRaw = true),
-            VariableAssignmentLexer(source, isDefaultNoRaw = true),
-        )
+    private val lexersList: List<Lexer> = listOf(
+        CommentLexer(source, state),
+        EmbedLexer(source, state, isDefaultNoRaw = true),
+        RawLexer(source, state, isDefaultNoRaw = true),
+        RuntimeWriteLexer(source, state, isDefaultNoRaw = true),
+        PlaceholderUseLexer(source, state, isDefaultNoRaw = true),
+        PlaceholderInvocationLexer(source, state, isDefaultNoRaw = true),
+        VariableDeclarationLexer(source, state, isDefaultNoRaw = true),
+        VariableAssignmentLexer(source, state, isDefaultNoRaw = true),
     )
 
     override fun lexTokenAtPosition(offset: Int): TokenRange? {

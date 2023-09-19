@@ -95,6 +95,10 @@ object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
         return KATEIDETokens.For
     }
 
+    override fun convert(token: KATETokens.EndFor): KATEIDEToken {
+        return KATEIDETokens.EndFor
+    }
+
     override fun convert(token: KATETokens.Var): KATEIDEToken {
         return KATEIDETokens.Var
     }
@@ -131,7 +135,7 @@ object KATEIDETokenConverter : TokenConverter<KATEIDEToken> {
         return KATEIDETokens.RightBrace
     }
 
-    override fun convert(token: KATETokens.At): KATEIDEToken {
+    override fun convert(token: KATETokens.Hash): KATEIDEToken {
         return KATEIDETokens.At
     }
 
